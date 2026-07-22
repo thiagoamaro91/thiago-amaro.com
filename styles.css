@@ -1,19 +1,32 @@
-  @font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 400; font-display: swap; src: url('assets/fonts/fraunces-v38-latin-regular.woff2') format('woff2'); }
-  @font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 500; font-display: swap; src: url('assets/fonts/fraunces-v38-latin-500.woff2') format('woff2'); }
   @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('assets/fonts/inter-v20-latin-regular.woff2') format('woff2'); }
   @font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('assets/fonts/inter-v20-latin-500.woff2') format('woff2'); }
   @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('assets/fonts/inter-v20-latin-600.woff2') format('woff2'); }
 
+  /* Swiss theme: light is the default, dark follows the visitor's OS setting */
   :root {
-    --bg: #0f1729;
-    --bg-alt: #131d33;
-    --bg-deep: #0a101f;
-    --card: #16213a;
-    --border: #26334f;
-    --cream: #f5f1e8;
-    --body: #a5aebf;
-    --muted: #78849a;
-    --accent: #d98e5f;
+    color-scheme: light dark;
+    --bg: #f6f6f2;
+    --bg-alt: #ecece6;
+    --bg-deep: #e3e3db;
+    --card: #ffffff;
+    --border: #d8d8d0;
+    --cream: #141414;
+    --body: #333330;
+    --muted: #8a8a82;
+    --accent: #d0342c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111111;
+      --bg-alt: #171717;
+      --bg-deep: #0a0a0a;
+      --card: #1b1b1b;
+      --border: #2e2e2e;
+      --cream: #f2f2ee;
+      --body: #a3a39c;
+      --muted: #757570;
+      --accent: #e0392f;
+    }
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -26,7 +39,7 @@
   nav a { color: var(--body); text-decoration: none; font-size: 14px; letter-spacing: 0.02em; }
   nav a:hover { color: var(--accent); }
 
-  h1, h2, .serif { font-family: 'Fraunces', Georgia, serif; font-weight: 400; color: var(--cream); }
+  h1, h2, .serif { font-family: 'Inter', Helvetica, Arial, sans-serif; font-weight: 600; letter-spacing: -0.02em; color: var(--cream); }
   h2 { font-size: 34px; margin-bottom: 36px; }
 
   /* Hero */
@@ -76,7 +89,7 @@
 
   /* Contact */
   .contact { background: var(--bg-deep); }
-  .contact .big { font-family: 'Fraunces', Georgia, serif; font-size: 30px; color: var(--cream); margin-bottom: 18px; }
+  .contact .big { font-family: 'Inter', Helvetica, Arial, sans-serif; font-weight: 600; letter-spacing: -0.02em; font-size: 30px; color: var(--cream); margin-bottom: 18px; }
   .contact a { color: var(--accent); text-decoration: none; }
   .contact .rows { margin-top: 24px; display: flex; gap: 28px; flex-wrap: wrap; font-size: 15px; }
   footer { padding: 40px 0; color: var(--muted); font-size: 13px; }
