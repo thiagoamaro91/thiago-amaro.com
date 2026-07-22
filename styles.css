@@ -13,7 +13,7 @@
     --cream: #141414;
     --body: #333330;
     --muted: #8a8a82;
-    --accent: #d0342c;
+    --accent: #b13a32;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -25,7 +25,7 @@
       --cream: #f2f2ee;
       --body: #a3a39c;
       --muted: #757570;
-      --accent: #e0392f;
+      --accent: #cd5247;
     }
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,13 +44,13 @@
 
   /* Hero */
   .hero { padding: 72px 0 96px; }
-  .avatar { width: 132px; height: 132px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; margin-bottom: 40px; }
+  .avatar { width: 132px; height: 132px; border-radius: 50%; border: 2px solid var(--border); object-fit: cover; margin-bottom: 40px; }
   .eyebrow { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 14px; }
   h1 { font-size: clamp(52px, 9vw, 84px); line-height: 1.02; margin-bottom: 26px; }
   .pitch { font-size: 19px; max-width: 560px; color: var(--body); }
   .hero-links { margin-top: 36px; display: flex; gap: 12px; }
-  .hero-links a { display: inline-block; padding: 9px 20px; border: 1px solid var(--border); border-radius: 999px; color: var(--accent); text-decoration: none; font-size: 14px; }
-  .hero-links a:hover { border-color: var(--accent); }
+  .hero-links a { display: inline-block; padding: 9px 20px; border: 1px solid var(--border); border-radius: 999px; color: var(--body); text-decoration: none; font-size: 14px; }
+  .hero-links a:hover { border-color: var(--accent); color: var(--accent); }
 
 
   /* About */
@@ -61,11 +61,11 @@
   .cols a { color: var(--accent); text-decoration: none; }
 
   /* Experience */
-  .job { border-left: 2px solid var(--accent); padding: 4px 0 4px 26px; margin-bottom: 56px; }
+  .job { border-left: 2px solid var(--border); padding: 4px 0 4px 26px; margin-bottom: 56px; }
   .job:last-child { margin-bottom: 0; }
   .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
   .job h3 { color: var(--cream); font-size: 19px; font-weight: 600; font-family: 'Inter', sans-serif; }
-  .job .org { color: var(--accent); font-size: 15px; margin-top: 2px; }
+  .job .org { color: var(--body); font-weight: 500; font-size: 15px; margin-top: 2px; }
   .job .dates { color: var(--muted); font-size: 14px; white-space: nowrap; }
   .job .role-context { font-size: 14.5px; color: var(--muted); font-style: italic; margin-top: 10px; }
   .job ul { margin-top: 14px; padding-left: 18px; }
@@ -75,9 +75,10 @@
   /* Projects */
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
   .proj { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 26px; }
-  .proj h3 { color: var(--accent); font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+  .proj h3 { color: var(--cream); font-size: 17px; font-weight: 600; margin-bottom: 10px; }
   .proj p { font-size: 14.5px; }
-  .proj a { display: inline-block; margin-top: 16px; color: var(--cream); font-size: 13px; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+  .proj a { display: inline-block; margin-top: 16px; color: var(--cream); font-size: 13px; text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 2px; }
+  .proj a:hover { color: var(--accent); border-color: var(--accent); }
 
   /* Writing */
   .post { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--border); }
