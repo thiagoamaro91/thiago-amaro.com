@@ -1,0 +1,77 @@
+  :root {
+    --bg: #0f1729;
+    --bg-alt: #131d33;
+    --bg-deep: #0a101f;
+    --card: #16213a;
+    --border: #26334f;
+    --cream: #f5f1e8;
+    --body: #a5aebf;
+    --muted: #78849a;
+    --accent: #d98e5f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--body); font-family: 'Inter', -apple-system, sans-serif; font-size: 16px; line-height: 1.7; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+  section { padding: 84px 0; }
+
+  nav { padding: 32px 0; }
+  nav .wrap { display: flex; gap: 28px; flex-wrap: wrap; }
+  nav a { color: var(--body); text-decoration: none; font-size: 14px; letter-spacing: 0.02em; }
+  nav a:hover { color: var(--accent); }
+
+  h1, h2, .serif { font-family: 'Fraunces', Georgia, serif; font-weight: 400; color: var(--cream); }
+  h2 { font-size: 34px; margin-bottom: 36px; }
+
+  /* Hero */
+  .hero { padding: 72px 0 96px; }
+  .avatar { width: 132px; height: 132px; border-radius: 50%; border: 2px solid var(--accent); background: radial-gradient(circle at 35% 30%, #2c3a55, #16213a); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; margin-bottom: 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 14px; }
+  h1 { font-size: clamp(52px, 9vw, 84px); line-height: 1.02; margin-bottom: 26px; }
+  .pitch { font-size: 19px; max-width: 560px; color: var(--body); }
+  .hero-links { margin-top: 36px; display: flex; gap: 12px; }
+  .hero-links a { display: inline-block; padding: 9px 20px; border: 1px solid var(--border); border-radius: 999px; color: var(--accent); text-decoration: none; font-size: 14px; }
+  .hero-links a:hover { border-color: var(--accent); }
+
+
+  /* About */
+  .alt { background: var(--bg-alt); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  @media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
+  .cols p + p { margin-top: 16px; }
+  .cols a { color: var(--accent); text-decoration: none; }
+
+  /* Experience */
+  .job { border-left: 2px solid var(--accent); padding: 4px 0 4px 26px; margin-bottom: 56px; }
+  .job:last-child { margin-bottom: 0; }
+  .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .job h3 { color: var(--cream); font-size: 19px; font-weight: 600; font-family: 'Inter', sans-serif; }
+  .job .org { color: var(--accent); font-size: 15px; margin-top: 2px; }
+  .job .dates { color: var(--muted); font-size: 14px; white-space: nowrap; }
+  .job .role-context { font-size: 14.5px; color: var(--muted); font-style: italic; margin-top: 10px; }
+  .job ul { margin-top: 14px; padding-left: 18px; }
+  .job li { margin-bottom: 10px; font-size: 15px; }
+  .job .role2 { margin-top: 34px; }
+
+  /* Projects */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .proj { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 26px; }
+  .proj h3 { color: var(--accent); font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+  .proj p { font-size: 14.5px; }
+  .proj a { display: inline-block; margin-top: 16px; color: var(--cream); font-size: 13px; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+
+  /* Writing */
+  .post { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .post:first-of-type { border-top: 1px solid var(--border); }
+  .post a { color: var(--cream); text-decoration: none; font-size: 16px; }
+  .post a:hover { color: var(--accent); }
+  .post .date { color: var(--muted); font-size: 14px; white-space: nowrap; }
+  .series-note { margin-bottom: 28px; max-width: 620px; }
+
+  /* Contact */
+  .contact { background: var(--bg-deep); }
+  .contact .big { font-family: 'Fraunces', Georgia, serif; font-size: 30px; color: var(--cream); margin-bottom: 18px; }
+  .contact a { color: var(--accent); text-decoration: none; }
+  .contact .rows { margin-top: 24px; display: flex; gap: 28px; flex-wrap: wrap; font-size: 15px; }
+  footer { padding: 40px 0; color: var(--muted); font-size: 13px; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
