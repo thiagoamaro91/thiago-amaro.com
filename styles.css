@@ -31,7 +31,7 @@
 
   /* Hero */
   .hero { padding: 72px 0 96px; }
-  .avatar { width: 132px; height: 132px; border-radius: 50%; border: 2px solid var(--accent); background: radial-gradient(circle at 35% 30%, #2c3a55, #16213a); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; margin-bottom: 40px; }
+  .avatar { width: 132px; height: 132px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; margin-bottom: 40px; }
   .eyebrow { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 14px; }
   h1 { font-size: clamp(52px, 9vw, 84px); line-height: 1.02; margin-bottom: 26px; }
   .pitch { font-size: 19px; max-width: 560px; color: var(--body); }
