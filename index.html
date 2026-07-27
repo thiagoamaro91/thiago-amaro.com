@@ -49,10 +49,11 @@
         <p>I spent eleven years as a mainframe system programmer at IBM, Broadcom, and Software AG, the kind of work where a mistake shows up on the evening news. Then I moved to the other side of the table: technical presales at Kyndryl, helping large banks, insurers, and governments decide what to do with the systems everything else runs on.</p>
         <p>That job changed over the last two years. Every modernization conversation turned into an AI conversation, and very few people in those meetings had spent real time on both sides.</p>
         <p>So I built things. In the beginning it was all for learning, but then they started to get useful: a multi-agent AI system my presales colleagues used every day, and open-source tooling for Claude Code that genuinely helps me in my daily work.</p>
+        <p>It didn't stop at work. Claude helped coordinate my family's move from Prague to Madrid, and with a private server at home it now takes care of my home network, my home automation, and my two PCs.</p>
       </div>
       <div>
-        <p>It didn't stop at work. Claude helped coordinate my family's move from Prague to Madrid, and with a private server at home it now takes care of my home network, my home automation, and my two PCs.</p>
-        <p>Starting early meant there was little to copy, so I had to learn the primitives myself: context and memory management, skills and workflows, skeptic review rounds, loops that monitor things, loops that improve the loops, even a nightly routine where my Claude sleeps and reorganizes its memory. Now an eval suite scores the whole setup every night (memory recall, skill routing, dispatch quality) and rolls back what regresses. That is what taught me how to work around the problems LLMs throw at you, and they come up all the time. Somewhere between four and five thousand hours with LLMs by now, because since I started I never stopped: I failed a lot, and I learned a lot.</p>
+        <p>Starting early meant there was little to copy, so I had to learn the primitives myself: context and memory management, skills and workflows, skeptic review rounds, loops that monitor things, loops that improve the loops, even a nightly routine where my Claude sleeps and reorganizes its memory. That is what taught me how to work around the problems LLMs throw at you, and they come up all the time. Somewhere between four and five thousand hours with LLMs by now, because since I started I never stopped: I failed a lot, and I learned a lot.</p>
+        <p>The newest of those primitives is measurement. The setup now scores itself on a schedule: whether it recalls what it stored, how much of a session survives the wrap-up, whether the right skill fires, how well each model tier handles a brief it was handed. Closing the first full loop took a day, and more than half of that first round of failures turned out to be problems with the evals rather than with the setup. That is the part nobody warns you about, and it is why I would not trust any of this without the numbers.</p>
         <p>Behind all of it is one belief: the bottleneck in enterprise AI isn't the models, it's the translation between them and the people who run critical systems. That's the room I've spent seventeen years in.</p>
       </div>
     </div>
@@ -140,6 +141,11 @@
         <h3>warmstart</h3>
         <p>Open-source Claude Code plugin suite for session continuity: context injection, guard hooks, dispatch patterns, wrap-up automation, and an eval suite that scores the plugins' own behavior. Eight public plugins and counting.</p>
         <a href="https://github.com/thiagoamaro91/warmstart">github.com/thiagoamaro91/warmstart</a>
+      </div>
+      <div class="proj">
+        <h3>Harness evals</h3>
+        <p>Five evals that measure my own development environment instead of a model: memory recall, what survives a session wrap-up, skill routing, dispatch quality per model tier, and action extraction. Runs nightly on two machines, with a regression gate around the nightly memory job.</p>
+        <a href="https://github.com/thiagoamaro91/warmstart/tree/main/evals">warmstart: evals chapter</a>
       </div>
       <div class="proj">
         <h3>caveat</h3>
