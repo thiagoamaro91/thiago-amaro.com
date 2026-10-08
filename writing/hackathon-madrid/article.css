@@ -199,3 +199,18 @@
   .byline { align-items: center; }
   .byline a { display: inline-block; padding: 2px 12px; border: 1px solid var(--border); border-radius: 999px; color: var(--body); text-decoration: none; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
   .byline a:hover, .byline a:focus-visible { border-color: var(--accent); color: var(--accent); }
+  /* collapsed long-form detail ({{details: NAME}}): the summary is a quiet text toggle, the prose inside keeps the measure */
+  .article > details.mechanics { max-width: 680px; margin: 0 0 1.4em; }
+  .mechanics > summary { display: inline-block; cursor: pointer; list-style: none; padding: 4px 0; font-size: 15.5px; font-weight: 600; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .mechanics > summary::-webkit-details-marker { display: none; }
+  .mechanics > summary::before { content: "+"; display: inline-block; width: 1.1em; text-decoration: none; }
+  .mechanics[open] > summary::before { content: "\2212"; }
+  .mechanics > summary:hover { text-decoration-thickness: 2px; }
+  .mechanics > summary:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; border-radius: 4px; }
+  .mechanics-body { margin-top: 14px; padding-left: 18px; border-left: 2px solid var(--border); }
+  .mechanics-body p { margin-bottom: 1.15em; }
+  .mechanics-body h4 { color: var(--cream); font-size: 18px; font-weight: 600; line-height: 1.35; margin: 28px 0 10px; }
+  .mechanics-body h4:first-child { margin-top: 0; }
+  .mechanics-body code { font: 0.86em ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: var(--cream); background: var(--card); border: 1px solid var(--border); border-radius: 5px; padding: 0.08em 0.32em; overflow-wrap: anywhere; }
+  .mechanics-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; overflow-wrap: anywhere; }
+  @media (max-width: 600px) { .mechanics-body { padding-left: 14px; } }
