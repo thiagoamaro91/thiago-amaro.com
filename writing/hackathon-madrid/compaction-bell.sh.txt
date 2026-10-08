@@ -2,7 +2,7 @@
 # Reference copy of Thiago Amaro's Claude Code harness, served next to the hackathon write-up.
 # What it is: a SessionStart hook (matcher "compact") that counts compactions per session id and prints text for the model.
 # As it ran during the event (last changed 2026-07-08, file mtime; in the author's dotfiles since 2026-10-08), plus one fix on line 23:
-# -H, since /tmp is a symlink on macOS; the laptop's live hook got the same fix on 2026-10-08. Provided as-is, without warranty.
+# -H, since /tmp is a symlink on macOS; the live hook on both machines (laptop and Mac Mini) got the same fix on 2026-10-08. Provided as-is, without warranty.
 # compaction-bell.sh - SessionStart hook (matcher: compact).
 # Token-economics decision 2026-07-08 (docs/token-economics_fable-decision_v1.md, A1):
 # auto-compaction is the wrap-up bell. 1st compaction = finish step + wrap.
