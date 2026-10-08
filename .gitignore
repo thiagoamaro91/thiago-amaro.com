@@ -3,3 +3,4 @@
 !assets/*.png
 !docs/screenshots/*.png
 preview-palettes.html
+!writing/hackathon-madrid/og-card.png

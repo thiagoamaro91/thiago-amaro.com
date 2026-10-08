@@ -1,0 +1,91 @@
+/* figures.css - shared styles for animated figures (see figures.js for the contract).
+   Colours read the site's own variables first and fall back to these defaults. */
+.fig{
+  --f-bg:var(--bg,#f6f6f2);--f-alt:var(--bg-alt,#ecece6);--f-card:var(--card,#ffffff);
+  --f-border:var(--border,#d8d8d0);--f-head:var(--cream,#141414);--f-body:var(--body,#333330);
+  --f-muted:var(--muted,#8a8a82);--f-accent:var(--accent,#b13a32);--f-gold:var(--gold,#e0b13a);
+  --f-goldd:#b88a1c;--f-ink:#141414;--f-ok:#2f7d4f;--f-hector:#9b9b93;--f-other:#d2d2c9;
+  margin:2em 0;color:var(--f-body);font-family:inherit;
+}
+@media (prefers-color-scheme:dark){
+  .fig{
+    --f-bg:var(--bg,#111111);--f-alt:var(--bg-alt,#171717);--f-card:var(--card,#1b1b1b);
+    --f-border:var(--border,#2e2e2e);--f-head:var(--cream,#f2f2ee);--f-body:var(--body,#a3a39c);
+    --f-muted:var(--muted,#757570);--f-accent:var(--accent,#cd5247);--f-ok:#4fae78;
+    --f-hector:#66665f;--f-other:#3c3c39;
+  }
+}
+.fig *{box-sizing:border-box}
+.fig-card{background:var(--f-card);border:1px solid var(--f-border);border-radius:12px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;font-family:inherit;font-size:20px;overflow:visible}
+.fig svg text{fill:var(--f-body)}
+.fig svg .h{fill:var(--f-head);font-weight:600}
+.fig svg .m{fill:var(--f-muted)}
+.fig svg .ink{fill:var(--f-ink);font-weight:600}
+.fig figcaption{margin-top:14px;font-size:1rem;line-height:1.55;color:var(--f-body)}
+.fig .num{font-variant-numeric:tabular-nums}
+
+/* shared shapes */
+.fig .box{fill:var(--f-alt);stroke:var(--f-muted);stroke-width:2}
+.fig .box.hero{fill:var(--f-gold);stroke:var(--f-goldd);stroke-width:3}
+.fig .arrow{fill:none;stroke:var(--f-body);stroke-width:3;stroke-linecap:round}
+.fig .head{fill:var(--f-body)}
+.fig .dotted{fill:none;stroke:var(--f-muted);stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
+.fig .flow-gold{fill:var(--f-goldd)}
+.fig .flow-muted{fill:var(--f-muted)}
+.fig .grow{transform-box:fill-box;transform-origin:50% 50%}
+
+/* entry states: only when figures.js has marked the figure (.js), so no-JS shows the final frame */
+.fig.js [data-step]:not([data-draw]):not(.on),.fig.js [data-pop]:not(.on){opacity:0}
+.fig.js [data-step]:not([data-draw]):not(.on){transform:translateY(10px)}
+.fig.js .head[data-step]:not(.on){transform:none}
+.fig.js [data-step]:not([data-draw]),.fig.js [data-pop]{transition:opacity .5s ease,transform .5s ease}
+.fig.js .head[data-step]{transition-delay:.55s}
+.fig.js [data-draw]{transition:stroke-dashoffset .7s ease}
+.fig.js [data-step]:not(.on) .grow{transform:scaleX(0)}
+.fig.js .grow{transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.fig.fig-reset,.fig.fig-reset *{transition:none!important}
+.fig.js.fig-fast [data-step]:not([data-draw]),.fig.js.fig-fast [data-pop]{transition-duration:.25s}
+.fig.js.fig-fast .head[data-step]{transition-delay:.28s}
+.fig.js.fig-fast [data-draw]{transition-duration:.35s}
+.fig.js.fig-fast .grow{transition-duration:.4s}
+
+/* replay + stepper */
+.fig-replay{margin-top:6px;padding:2px 0;border:0;background:none;color:var(--f-muted);font:inherit;font-size:.9rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.fig-replay:hover,.fig-replay:focus-visible{color:var(--f-head)}
+.fig-dots{display:flex;gap:10px;margin:10px 4px 0;outline:none}
+.fig-dots button{width:14px;height:14px;padding:0;border-radius:50%;border:1.5px solid var(--f-muted);background:none;cursor:pointer}
+.fig-dots button.on{background:var(--f-gold);border-color:var(--f-goldd)}
+.fig-dots:focus-visible{outline:2px solid var(--f-muted);outline-offset:4px;border-radius:6px}
+
+/* figure-specific layout */
+.fig-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fig-panel{margin-top:14px;padding:14px 18px;border-radius:10px;background:var(--f-gold);color:var(--f-ink);font-size:1.05rem;line-height:1.5}
+.fig-panel b{font-weight:600}
+.fig-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.fig-tile{padding:18px 18px 16px;border-radius:12px;background:var(--f-card);border:1px solid var(--f-border);display:flex;flex-direction:column;justify-content:flex-end;min-height:150px}
+.fig-tile .big{font-size:3rem;line-height:1.05;font-weight:600;color:var(--f-head);font-variant-numeric:tabular-nums}
+.fig-tile .two{font-size:1.2rem;line-height:1.5;color:var(--f-head)}
+.fig-tile .two b{font-size:1.7rem;font-weight:600;font-variant-numeric:tabular-nums}
+.fig-tile .big small{font-size:.38em;font-weight:500;letter-spacing:0;margin-right:.25em}
+.fig-tile .lab{margin-top:8px;font-size:1.05rem;line-height:1.4;color:var(--f-body)}
+.fig-tile.gold{background:var(--f-gold);border-color:var(--f-goldd)}
+.fig-tile.gold .big,.fig-tile.gold .lab{color:var(--f-ink)}
+@media (max-width:760px){
+  .fig-grid{grid-template-columns:1fr}
+  .fig-tiles{grid-template-columns:1fr 1fr}
+  .fig-tile .big{font-size:2.4rem}
+}
+@media (max-width:420px){.fig-tile{padding:14px;min-height:130px}.fig-tile .two{font-size:1.05rem}}
+
+@media (prefers-reduced-motion:reduce){
+  .fig,.fig *{transition:none!important;animation:none!important}
+  .fig-replay{display:none}
+}
+
+/* cadence strip */
+.fig .s-h{fill:var(--f-hector)}
+.fig .s-t{fill:var(--f-gold)}
+.fig .s-o{fill:var(--f-other);stroke:var(--f-muted)}
+.fig .bar rect{stroke:var(--f-card);stroke-width:2}
+.fig .bar{transform-box:fill-box;transform-origin:50% 100%}
