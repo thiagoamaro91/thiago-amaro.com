@@ -36,6 +36,8 @@
     --f-bg: #f6f6f2; --f-alt: #ecece6; --f-card: #ffffff; --f-border: #d8d8d0; --f-head: #141414; --f-body: #333330;
     --f-muted: #8a8a82; --f-accent: #b13a32; --f-ok: #2f7d4f; }
   .fig-diagram svg text:not([fill]) { fill: inherit; }
+  /* a diagram may carry a phone-first drawing beside the 1080x1350 one: one of the two shows at a time */
+  .fig-diagram svg.fig-phone { display: none; }
 
   /* Wide SVG figures: they pan inside their frame on phones, and every width gets a full-screen view */
   .pan-hint { display: none; }
@@ -51,6 +53,8 @@
     /* the three core diagrams fit the width on phones: the shape first, Full screen for the detail */
     .fig-diagram .pan { overflow: visible; }
     .fig-diagram .pan > svg { min-width: 0; }
+    .fig-diagram svg.fig-desk { display: none; }
+    .fig-diagram svg.fig-phone { display: block; }
   }
 
   /* Full-screen figure dialog */
@@ -66,6 +70,8 @@
   .fs-body > figure { width: max(100%, 940px); margin: 0; }
   .fs .pan { overflow: visible; }
   .fs .pan > svg { min-width: 0; }
+  .fs .fig-diagram svg.fig-desk { display: block; }   /* full screen always shows the desktop drawing, for pinch-zoom */
+  .fs .fig-diagram svg.fig-phone { display: none; }
   .fs .pan-hint, .fs .fig-full { display: none; }
   .fs figure figcaption { font-size: 14.5px; line-height: 1.55; color: var(--muted); }
   .fs .rp figcaption { padding: 0 16px 14px; }
