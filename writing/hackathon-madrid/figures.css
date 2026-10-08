@@ -68,6 +68,7 @@
 .fig-tile .two{font-size:1.2rem;line-height:1.5;color:var(--f-head)}
 .fig-tile .two b{font-size:1.7rem;font-weight:600;font-variant-numeric:tabular-nums}
 .fig-tile .big small{font-size:.38em;font-weight:500;letter-spacing:0;margin-right:.25em}
+.fig-tile .big small:last-child{margin-right:0}
 .fig-tile .lab{margin-top:8px;font-size:1.05rem;line-height:1.4;color:var(--f-body)}
 .fig-tile.gold{background:var(--f-gold);border-color:var(--f-goldd)}
 .fig-tile.gold .big,.fig-tile.gold .lab{color:var(--f-ink)}
@@ -76,7 +77,7 @@
   .fig-tiles{grid-template-columns:1fr 1fr}
   .fig-tile .big{font-size:2.4rem}
 }
-@media (max-width:420px){.fig-tile{padding:14px;min-height:130px}.fig-tile .two{font-size:1.05rem}}
+@media (max-width:420px){.fig-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.fig-tile{padding:14px;min-height:130px}.fig-tile .big{font-size:2rem}.fig-tile .big small:first-child{display:block}.fig-tile .two{font-size:1.05rem}}
 
 @media (prefers-reduced-motion:reduce){
   .fig,.fig *{transition:none!important;animation:none!important}

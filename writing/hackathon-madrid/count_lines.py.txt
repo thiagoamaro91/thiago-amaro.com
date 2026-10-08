@@ -1,0 +1,94 @@
+# Served copy of the line counter behind the "about 52,000 lines" figure on this page.
+# Usage: git archive 9e22d35 | tar -x -C <dir>; python3 count_lines.py <dir>
+# The figure sums the sloc of the py rows of agent, tools, evals and tests plus the sh and html rows of tools
+# (33,261 source + 18,794 tests = 52,055). json and plist rows, evals html (generated reports) and kit/ are not counted.
+"""Count non-blank, non-comment lines (SLOC) by bucket and language.
+Rules: blank lines skipped everywhere.
+.py: tokenize; a line counts if it carries any token other than COMMENT/NL/NEWLINE/INDENT/DEDENT,
+     and lines belonging only to a docstring (a STRING token that is a whole expression statement) are skipped.
+.sh/.yml/.yaml/.toml/.plist-free: lines whose lstrip starts with '#' skipped (shebang included).
+.js/.css: lines starting with // skipped, /* ... */ block lines skipped.
+.html: lines inside <!-- --> skipped; inline <script> lines starting with // skipped.
+.json/.jsonl and other config: non-blank lines only.
+Buckets: agent/, tools/, evals/ (source files only), tests/, kit/ (official, excluded), other source elsewhere; logs/, docs/, results/ excluded."""
+import os, sys, io, tokenize, collections, json
+root = sys.argv[1]
+LANG = {'.py':'py','.sh':'sh','.js':'js','.html':'html','.css':'css','.yml':'yaml','.yaml':'yaml','.toml':'toml','.json':'json','.plist':'plist'}
+def py_sloc(text):
+    lines=set(); doc=set()
+    try:
+        toks=list(tokenize.generate_tokens(io.StringIO(text).readline))
+    except Exception:
+        return sum(1 for l in text.splitlines() if l.strip() and not l.lstrip().startswith('#'))
+    prev_sig=None
+    for i,t in enumerate(toks):
+        if t.type in (tokenize.COMMENT,tokenize.NL,tokenize.NEWLINE,tokenize.INDENT,tokenize.DEDENT,tokenize.ENDMARKER): continue
+        if t.type==tokenize.STRING and (prev_sig is None or prev_sig.type in (tokenize.NEWLINE,tokenize.INDENT,tokenize.DEDENT) or (prev_sig.type==tokenize.OP and prev_sig.string==':' and False)):
+            # string at start of a logical line: docstring if next significant token ends the line
+            j=i+1
+            while j<len(toks) and toks[j].type in (tokenize.COMMENT,tokenize.NL): j+=1
+            if j<len(toks) and toks[j].type in (tokenize.NEWLINE,tokenize.ENDMARKER):
+                for ln in range(t.start[0],t.end[0]+1): doc.add(ln)
+                prev_sig=t; continue
+        for ln in range(t.start[0],t.end[0]+1): lines.add(ln)
+        prev_sig=t if t.type!=tokenize.NEWLINE else t
+    # prev tracking for NEWLINE
+    return len(lines-doc)
+def py_sloc2(text):
+    # wrapper that tracks NEWLINE tokens properly
+    lines=set(); doc=set()
+    try: toks=list(tokenize.generate_tokens(io.StringIO(text).readline))
+    except Exception: return sum(1 for l in text.splitlines() if l.strip() and not l.lstrip().startswith('#'))
+    at_line_start=True
+    for i,t in enumerate(toks):
+        if t.type in (tokenize.NEWLINE,): at_line_start=True; continue
+        if t.type in (tokenize.COMMENT,tokenize.NL,tokenize.INDENT,tokenize.DEDENT,tokenize.ENDMARKER): continue
+        if t.type==tokenize.STRING and at_line_start:
+            j=i+1
+            while j<len(toks) and toks[j].type in (tokenize.COMMENT,tokenize.NL): j+=1
+            if j<len(toks) and toks[j].type in (tokenize.NEWLINE,tokenize.ENDMARKER):
+                doc.update(range(t.start[0],t.end[0]+1)); at_line_start=False; continue
+        at_line_start=False
+        lines.update(range(t.start[0],t.end[0]+1))
+    return len(lines-doc)
+def generic(text,lang):
+    n=0; inblk=False
+    for l in text.splitlines():
+        s=l.strip()
+        if not s: continue
+        if lang in ('sh','yaml','toml'):
+            if s.startswith('#'): continue
+        elif lang in ('js','css'):
+            if inblk:
+                if '*/' in s: inblk=False
+                continue
+            if s.startswith('//'): continue
+            if s.startswith('/*'):
+                if '*/' not in s: inblk=True
+                continue
+        elif lang=='html':
+            if inblk:
+                if '-->' in s: inblk=False
+                continue
+            if s.startswith('<!--'):
+                if '-->' not in s: inblk=True
+                continue
+            if s.startswith('//'): continue
+        n+=1
+    return n
+res=collections.defaultdict(lambda: collections.Counter())
+for dp,dn,fn in os.walk(root):
+    rel=os.path.relpath(dp,root)
+    top=rel.split(os.sep)[0] if rel!='.' else '.'
+    if top in ('logs','docs','results'): continue
+    for f in fn:
+        ext=os.path.splitext(f)[1].lower()
+        if ext not in LANG: continue
+        lang=LANG[ext]
+        bucket={'agent':'agent','tools':'tools','evals':'evals','tests':'tests','kit':'kit (official, excluded)'}.get(top,'other:'+top)
+        p=os.path.join(dp,f); text=open(p,encoding='utf-8',errors='replace').read()
+        raw=len(text.splitlines())
+        sl=py_sloc2(text) if lang=='py' else generic(text,lang)
+        res[(bucket,lang)]['files']+=1; res[(bucket,lang)]['sloc']+=sl; res[(bucket,lang)]['raw']+=raw
+out=[{'bucket':b,'lang':l,**dict(c)} for (b,l),c in sorted(res.items())]
+print(json.dumps(out))
