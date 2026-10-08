@@ -1,0 +1,34 @@
+#!/bin/bash
+# Reference copy of Thiago Amaro's Claude Code harness, served next to the hackathon write-up.
+# What it is: a SessionStart hook (matcher "compact") that counts compactions per session id and prints text for the model.
+# As it ran during the event (last changed 2026-07-08, file mtime; in the author's dotfiles since 2026-10-08), plus one fix on line 23:
+# -H, since /tmp is a symlink on macOS; the laptop's live hook got the same fix on 2026-10-08. Provided as-is, without warranty.
+# compaction-bell.sh - SessionStart hook (matcher: compact).
+# Token-economics decision 2026-07-08 (docs/token-economics_fable-decision_v1.md, A1):
+# auto-compaction is the wrap-up bell. 1st compaction = finish step + wrap.
+# 2nd+ compaction = loud repeat. Counter per session in /tmp.
+
+INPUT=$(cat)
+SID=$(echo "$INPUT" | jq -r '.session_id // empty')
+SID="${SID//[^a-zA-Z0-9_-]/}"
+[ -z "$SID" ] && exit 0
+
+COUNTER="/tmp/claude-compact-${SID}"
+N=0
+[ -f "$COUNTER" ] && N=$(cat "$COUNTER" 2>/dev/null)
+N=$(( ${N:-0} + 1 ))
+echo "$N" > "$COUNTER"
+
+# Clean markers older than 24h
+find -H /tmp -maxdepth 1 -name 'claude-compact-*' -mtime +1 -delete 2>/dev/null
+
+if [ "$N" -eq 1 ]; then
+  cat <<'EOF'
+<system-reminder>COMPACTION BELL (workspace token-economics rule A1): this session just auto-compacted. Treat this as the wrap-up signal: finish ONLY the step currently in progress, then run the wrapup skill and tell the user to continue in a fresh session. Do not start new workstream items in this session. Rationale: each compaction cycle re-bills the context climb at premium-model cache-read rates (see docs/token-economics_fable-decision_v1.md).</system-reminder>
+EOF
+else
+  cat <<EOF
+<system-reminder>COMPACTION BELL - HARD STOP (compaction #${N} this session): the token-economics rule A1 bans riding a conductor session through 2+ compaction cycles. Stop new work NOW. Run the wrapup skill immediately and hand off to a fresh session. This is a standing owner rule, not a suggestion (docs/token-economics_fable-decision_v1.md).</system-reminder>
+EOF
+fi
+exit 0

@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Reference copy of Thiago Amaro's Claude Code harness, served next to the hackathon write-up.
+# What it is: opens a named zellij tab running interactive Claude Code with a hand-off briefing as its first prompt.
+# Last changed 2026-08-10 (last commit in the author's dotfiles history). The code below is unchanged in this copy.
+# Provided as-is, without warranty. Paths, the ledger file and the tab-status hook belong to the author's own setup.
+# kickoff-session.sh - spawn a visible zellij tab running Claude Code with a kickoff prompt.
+# Usage: kickoff-session.sh <project-dir> <prompt-file> [tab-name] [extra claude args...]
+# The prompt file is read in THIS shell and passed as a single argv element, so
+# multiline prompts survive zellij -> claude intact.
+# A watch-agents pane (live subagent transcripts) is opt-in: set KICKOFF_WATCH=1
+# to attach it below the session (disabled by default 2026-07-27; redundant while
+# working inside Claude Code).
+set -euo pipefail
+
+die() { echo "kickoff-session: $*" >&2; exit 1; }
+
+[ $# -ge 2 ] || die "usage: kickoff-session.sh <project-dir> <prompt-file> [tab-name] [extra claude args...]"
+
+PROJECT_DIR=$1
+PROMPT_FILE=$2
+shift 2
+
+# Optional tab name: next arg, unless it looks like a flag.
+if [ $# -ge 1 ] && [ "${1#-}" = "$1" ]; then
+  TAB_NAME=$1
+  shift
+else
+  TAB_NAME=$(basename "$PROJECT_DIR")
+fi
+
+[ -n "${ZELLIJ_SESSION_NAME:-}" ] || die "not inside a zellij session; run manually: cd '$PROJECT_DIR' && claude \"\$(cat '$PROMPT_FILE')\""
+[ -d "$PROJECT_DIR" ] || die "project dir not found: $PROJECT_DIR"
+[ -s "$PROMPT_FILE" ] || die "prompt file missing or empty: $PROMPT_FILE"
+
+# Staleness guard: a handoff titled after a ledger item (e.g. "# LEV-7 Finish: ...")
+# must not spawn if that row is already DONE/DISCARDED - it means an earlier session
+# consumed the handoff (LEV-7 replay, 2026-07-28). Only the TITLE line is checked so
+# body mentions like "LEV-1..5 DONE" never false-positive. KICKOFF_FORCE=1 overrides.
+LEDGER="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Claude/docs/master-roadmap_ledger_v1.md"
+if [ -z "${KICKOFF_FORCE:-}" ] && [ -f "$LEDGER" ]; then
+  TITLE=$(grep -m1 '^#' "$PROMPT_FILE" || true)
+  for ID in $(printf '%s\n' "$TITLE" | grep -oE '[A-Z][A-Z0-9]*-[0-9]+' | sort -u); do
+    STATUS=$(grep -m1 -E "^\| $ID \|" "$LEDGER" | awk -F'|' '{gsub(/ /,"",$4); print $4}')
+    case "$STATUS" in
+      DONE|DISCARDED) die "stale handoff: ledger row $ID is already $STATUS (set KICKOFF_FORCE=1 to spawn anyway)";;
+    esac
+  done
+fi
+
+# zellij command-panes exec the binary directly (no login shell), so resolve claude now.
+# Per-machine layouts differ (2026-08-10): the Mini's ONE real install is the native
+# ~/.local/bin/claude (its Homebrew copy lagged stale and was removed); the Air has
+# ONLY the Homebrew copy. Prefer native when present, else PATH, then PROBE the
+# resolved binary: the historical failure mode is a stale copy that hangs at startup
+# with 0% CPU, which a spawned tab shows as silence - die loudly here instead.
+CLAUDE_BIN="$HOME/.local/bin/claude"
+[ -x "$CLAUDE_BIN" ] || CLAUDE_BIN=$(command -v claude) || die "claude not found in PATH"
+timeout 15 "$CLAUDE_BIN" --version >/dev/null 2>&1 \
+  || die "claude at $CLAUDE_BIN is unresponsive (--version hung or failed); stale install?"
+
+# KICKOFF_TAB marks the spawned claude as a kickoff session; the
+# kickoff-tab-status.sh hook uses it to rename this tab by session state.
+# --name makes the session addressable via SendMessage/ListAgents by the tab
+# slug. crossSessionInbound=accept lets a conductor session message this tab
+# without a held-message dialog: the spawn runs bypassPermissions, and a bypass
+# receiver holds messages from non-bypass senders by default (claude >= 2.1.224;
+# both flags parse on older versions, messaging just stays off).
+TAB_ID=$(zellij action new-tab --cwd "$PROJECT_DIR" --name "$TAB_NAME" -- \
+  /usr/bin/env "KICKOFF_TAB=$TAB_NAME" \
+  "$CLAUDE_BIN" --permission-mode bypassPermissions --name "$TAB_NAME" \
+  --settings '{"crossSessionInbound":"accept"}' "$@" "$(cat "$PROMPT_FILE")")
+
+# Sidecar: the tab's stable ID for the status hook. Unqualified rename-tab
+# targets whatever tab has FOCUS (verified 2026-07-28, zellij 0.44.3); only
+# rename-tab -t <id> is safe from a background tab, and the id is only known
+# here, after new-tab returns - the spawned env can't carry it.
+mkdir -p "$HOME/.claude/kickoff-tabs"
+printf '%s\n' "$TAB_ID" > "$HOME/.claude/kickoff-tabs/$TAB_NAME.id"
+
+echo "spawned tab '$TAB_NAME' (id $TAB_ID) in $PROJECT_DIR with prompt $PROMPT_FILE"
+
+# Watcher pane: live subagent transcripts under the new session (new-tab focuses
+# the new tab, so the pane lands there). The until-loop covers the race where the
+# project has no session transcript yet - watch-agents exits nonzero until the
+# spawned claude writes its first JSONL, then attaches and follows it.
+WATCH_BIN="$HOME/.claude/scripts/watch-agents"
+if [ -n "${KICKOFF_WATCH:-}" ] && [ -x "$WATCH_BIN" ]; then
+  zellij action new-pane --direction down --cwd "$PROJECT_DIR" -- \
+    /bin/bash -c "until '$WATCH_BIN' --project '$PROJECT_DIR'; do sleep 2; done"
+  echo "watcher pane attached (KICKOFF_WATCH=1 requested)"
+fi

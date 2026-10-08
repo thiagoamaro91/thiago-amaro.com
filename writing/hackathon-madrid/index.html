@@ -37,7 +37,7 @@
 
 <header>
 <h1>Keep the model out of the money path: notes from a 48-hour Claude Code build</h1>
-<p class="byline"><span>October 2026 · Thiago Amaro, with Hector Moyano</span><span>Code and evidence: <a class="pill" href="https://github.com/thiagoamaro91/negotiation-agent">github.com/thiagoamaro91/negotiation-agent</a></span><span>14 minutes of text</span></p>
+<p class="byline"><span>October 2026 · Thiago Amaro, with Hector Moyano</span><span>Code and evidence: <a class="pill" href="https://github.com/thiagoamaro91/negotiation-agent">github.com/thiagoamaro91/negotiation-agent</a></span><span>18 minutes of text</span></p>
 </header>
 
 <p>At a hackathon where the other teams' bots were allowed to lie to ours, Hector Moyano and I built trading bots that never call a model, ran Claude Code one level above them, and let an eval say no twice. We came first of 18 teams on the game's negotiating score and finished 4th on the game leaderboard at close. This is how the bots made their decisions, how the Claude Code sessions were run, how a change had to earn its way into the live bots, and the mistake I made on Saturday morning.</p>
@@ -62,14 +62,17 @@ other bots was never parsed for terms, so it could not change a price or an acce
 dealer bot read it only to flag offers whose words contradicted their terms). Claude Code
 wrote almost all the code, including the bots' chat lines, ahead of time.
 
-Orchestration: Claude Code sessions worked one level above the bots, each started from a
-written hand-off briefing (19 are published in the repo). One conductor session at a time
-decided which bot ran, with which settings and when. A read-only monitor session relayed the
-humans. An analyst session that never held the team key read the logs and proposed changes as
-pull requests. A GitHub issue served as a message bus between Thiago's and Hector's Claude
-sessions. 107 pull requests were merged in 48 hours. From Saturday 16:00 no human approved
-individual trades; on Sunday, from the plan approval at 11:52 to the close, the conductor ran
-with no human gates inside the game.
+Orchestration: Claude Code sessions worked one level above the bots; most of Thiago's started
+from a written hand-off briefing (19 are published in the repo). A hook rang a bell after
+each context compaction. Five times a session that had run out of context wrote the next
+briefing and spawned its successor in a new terminal tab; four of those hand-offs came at
+Thiago's one-line request. One conductor session at a time decided which bot ran, with which
+settings and when. A read-only monitor session relayed the humans. An analyst session that
+never held the team key read the logs and proposed changes as pull requests. A GitHub issue
+served as a message bus between Thiago's and Hector's Claude sessions. 107 pull requests were
+merged in 48 hours. From Saturday 16:00 no human approved individual trades; on Sunday, from
+the plan approval at 11:52 to the close, the conductor ran with no human gates inside the
+game.
 
 Improvement loop: candidate settings were tested on offline evals that replay recorded cases
 with no network, no key and no model. Each acceptance rule was written before its run. For
@@ -927,7 +930,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 </svg></div>
 </figure>
 
-<p>Above the bots, the work ran in Claude Code sessions. Every session started from a written briefing: its goal, its authority, its hard rules, the plan and its checkpoints. Nineteen of those briefings are in the repo. When a session ran out of context, it wrote the briefing for the next one, and a fresh session picked up from there and carried on.</p>
+<p>Above the bots, the work ran in Claude Code sessions. Most of the sessions on my side started from a written briefing: its goal, its authority, its hard rules, the plan and its checkpoints. Nineteen of those briefings are in the repo. When a session ran out of context, it wrote the briefing for the next one, and a fresh session picked up from there and carried on.</p>
 
 <figure class="ba" id="ba">
 <figcaption class="ba-head"><span class="ba-title">A real session briefing, annotated: the Sunday final conductor</span><span class="ba-cap">One of 19 briefings in the repo. A fresh session reads this and carries on where the last one stopped.</span></figcaption>
@@ -999,6 +1002,235 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <p>The pull-request flow was fast. We merged 107 pull requests in 48 hours, 99 of them before the game froze on Sunday, with a median of 15 minutes from open to merge for those 99. Speed only means something next to the quality signals, so here they are: the repo has 1,709 test functions across 63 test files, with 34 known failures listed rather than hidden. Review was a Claude steward session checking protected files and tests, with Codex on the riskier changes. Some pull requests were merged without a completed review, and the section on the mistake is about what that cost us.</p>
 
 <p>On the split of the work: Hector authored 63 of those pull requests, I authored 43, and one came from another account. He built the evals and more of the code. My part was the layer above the code: the conductor design, running my side's sessions through written hand-off briefings, and the strategy. On Friday I also built the first dealer bot and the team dashboard.</p>
+
+<h3 id="how-a-session-hands-off">How a session hands off</h3>
+
+<p>Since July I haven't managed context by hand. A hook rings a bell, and the session is told to wrap up and hand over to a fresh one.</p>
+
+<h4 id="what-claude-code-does">What Claude Code does</h4>
+
+<p>When the context window nears full, Claude Code compacts it: the docs say it clears older tool outputs, then summarizes the conversation, and that early instructions may get lost. The session keeps its id. When that happens is a setting: on my laptop it's set to 500,000 tokens today, and the weekend's value isn't recorded. After each compaction, Claude Code reruns the SessionStart hooks with the source "compact", and whatever a hook prints goes into the model's context.</p>
+
+<h4 id="what-my-harness-adds">What my harness adds</h4>
+
+<p>A 30-line hook, <code>compaction-bell.sh</code>, counts compactions per session id in a file under <code>/tmp</code>. The first time, it prints a wrap-up bell: "finish ONLY the step currently in progress, then run the wrapup skill". From the second on, the wording becomes a hard stop: "Stop new work NOW. Run the wrapup skill immediately and hand off to a fresh session." Nothing in code moves a session: the hook injects text, and the model decides under a written rule.</p>
+
+<p>The rule dates from July, when I looked at what long sessions cost: each compaction cycle grows the context back and pays for the whole climb again. My skills say a tab opens only when I ask. In practice the model also took a standing written rule as that ask: the bell's text, a briefing line or a goal I'd set. Three briefings carried one; f9's read: "If you hit a compaction bell, hand off to a fresh session through a handoff file in ~/.claude/handoffs/; do not ride it." The other two say the same in their own words.</p>
+
+<p>If the model goes ahead, it runs my wrapup skill, which updates my notes and commits, and writes a briefing into <code>~/.claude/handoffs/</code> for a reader who knows nothing. Of the weekend's 19, 12 open by telling the reader it is a fresh session "with zero prior context"; the rest name the role and the session they replace. All list what to read first or the state, plus rules and checkpoints.</p>
+
+<p>Then it runs <code>kickoff-session.sh</code> with the folder, the briefing and a tab name. The script won't spawn unless it's inside zellij, the folder exists, the briefing isn't empty, its title doesn't name an item my ledger marks done, and the claude binary answers <code>--version</code> within 15 seconds. It then opens a named zellij tab running <code>claude --permission-mode bypassPermissions --name &lt;tab&gt;</code> with the whole briefing as one argument: the first prompt of an ordinary interactive session I can watch and type into. A sidecar file keeps the tab's id, so a status hook can show an hourglass while the session works and a raised hand while it waits for me.</p>
+
+<figure class="cg" aria-label="The hand-off machinery, excerpted from the author's harness">
+<pre class="cg-pre"><code><span class="cg-file">compaction-bell.sh · one counter per session id</span><span class="cg-ln"><span class="cg-no">16</span><span class="cg-tx">COUNTER="/tmp/claude-compact-${SID}"</span></span><span class="cg-ln"><span class="cg-no">17</span><span class="cg-tx">N=0</span></span><span class="cg-ln"><span class="cg-no">18</span><span class="cg-tx">[ -f "$COUNTER" ] &amp;&amp; N=$(cat "$COUNTER" 2&gt;/dev/null)</span></span><span class="cg-ln"><span class="cg-no">19</span><span class="cg-tx">N=$(( ${N:-0} + 1 ))</span></span><span class="cg-ln"><span class="cg-no">20</span><span class="cg-tx">echo "$N" &gt; "$COUNTER"</span></span><span class="cg-gap"></span><span class="cg-file">compaction-bell.sh · its whole output: text for the model, then exit 0</span><span class="cg-ln"><span class="cg-no">25</span><span class="cg-tx">if [ "$N" -eq 1 ]; then</span></span><span class="cg-ln"><span class="cg-no">26</span><span class="cg-tx">  cat &lt;&lt;'EOF'</span></span><span class="cg-ln"><span class="cg-no">27</span><span class="cg-tx">&lt;system-reminder&gt;COMPACTION BELL (workspace token-economics rule A1): this</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  session just auto-compacted. Treat this as the wrap-up signal: finish ONLY the</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  step currently in progress, then run the wrapup skill and tell the user to</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  continue in a fresh session. Do not start new workstream items in this</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  session. [...]&lt;/system-reminder&gt;</span></span><span class="cg-ln"><span class="cg-no">28</span><span class="cg-tx">EOF</span></span><span class="cg-ln"><span class="cg-no">29</span><span class="cg-tx">else</span></span><span class="cg-ln"><span class="cg-no">30</span><span class="cg-tx">  cat &lt;&lt;EOF</span></span><span class="cg-ln"><span class="cg-no">31</span><span class="cg-tx">&lt;system-reminder&gt;COMPACTION BELL - HARD STOP (compaction #${N} this session):</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  the token-economics rule A1 bans riding a conductor session through 2+</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  compaction cycles. Stop new work NOW. Run the wrapup skill immediately and</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  hand off to a fresh session. This is a standing owner rule, not a suggestion</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  [...].&lt;/system-reminder&gt;</span></span><span class="cg-ln"><span class="cg-no">32</span><span class="cg-tx">EOF</span></span><span class="cg-ln"><span class="cg-no">33</span><span class="cg-tx">fi</span></span><span class="cg-ln"><span class="cg-no">34</span><span class="cg-tx">exit 0</span></span><span class="cg-gap"></span><span class="cg-file">kickoff-session.sh · a visible tab; the briefing is the first prompt</span><span class="cg-ln"><span class="cg-no">68</span><span class="cg-tx">TAB_ID=$(zellij action new-tab --cwd "$PROJECT_DIR" --name "$TAB_NAME" -- \</span></span><span class="cg-ln"><span class="cg-no">69</span><span class="cg-tx">  /usr/bin/env "KICKOFF_TAB=$TAB_NAME" \</span></span><span class="cg-ln"><span class="cg-no">70</span><span class="cg-tx">  "$CLAUDE_BIN" --permission-mode bypassPermissions --name "$TAB_NAME" \</span></span><span class="cg-ln"><span class="cg-no">71</span><span class="cg-tx">  --settings '{"crossSessionInbound":"accept"}' "$@" "$(cat "$PROMPT_FILE")")</span></span><span class="cg-gap"></span><span class="cg-file">kickoff-session.sh · the sidecar: the tab's id, for the status marks</span><span class="cg-ln"><span class="cg-no">77</span><span class="cg-tx">mkdir -p "$HOME/.claude/kickoff-tabs"</span></span><span class="cg-ln"><span class="cg-no">78</span><span class="cg-tx">printf '%s\n' "$TAB_ID" &gt; "$HOME/.claude/kickoff-tabs/$TAB_NAME.id"</span></span></code></pre>
+<figcaption class="cg-src">Served next to this page as reference copies (reflowed for width; [...] marks text cut from the two messages): <a href="compaction-bell.sh.txt#L16-L20" target="_blank" rel="noopener">compaction-bell.sh, lines 16-20</a> · <a href="compaction-bell.sh.txt#L25-L34" target="_blank" rel="noopener">lines 25-34</a> · <a href="kickoff-session.sh.txt#L68-L71" target="_blank" rel="noopener">kickoff-session.sh, lines 68-71</a> · <a href="kickoff-session.sh.txt#L77-L78" target="_blank" rel="noopener">lines 77-78</a></figcaption>
+</figure>
+
+<p>The new session starts with a fresh context window. Claude Code loads my CLAUDE.md files and memory as usual, a hook of mine adds the workspace index, and the session works down the briefing's read-first list.</p>
+
+<figure class="fig fig-diagram" data-fig="handoff-loop" data-step-ms="360" role="group" aria-label="Diagram: how a session hands off">
+<div class="pan"><svg id="hl-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="100%" role="img" aria-labelledby="hl-title hl-desc" font-family="Inter, sans-serif" fill="#333330">
+<title id="hl-title">How a session hands off</title>
+<desc id="hl-desc">Main path, clockwise from the top left. Claude Code's own part, in grey: the context nears full, auto-compaction keeps the same session id, and the SessionStart hooks rerun with source compact, their output going into the context. My harness, in white with a gold strip: compaction-bell.sh keeps one counter per session id and prints text, a wrap-up bell at the first compaction and a hard stop from the second on, then exits. That text lands in the model's context. The model decides, in the dashed gold box: finish the step, wrap up, and hand off only when allowed, either by a written authorization (the bell's text, a briefing rule 'do not ride it', or a goal I set) or because I ask in one line, as in 4 of the 5 weekend hand-offs. If it goes ahead, the wrapup skill updates notes and commits; a briefing file in ~/.claude/handoffs/ is written for a reader with zero prior context (read first, state, done-gates, rules); kickoff-session.sh checks zellij, the folder, the briefing, the ledger and that claude answers within 15 seconds, then opens a new zellij tab running claude with --permission-mode bypassPermissions and --name, the briefing as its first prompt; a sidecar file keeps the tab id. The new session gets a fresh context window and loads CLAUDE.md and memory (Claude Code), gets the workspace index from a hook, and its tab shows working or waiting (my harness). It has its own counter, so its first compaction rings bell #1 again. Side paths: the old session stays open until someone closes it; a timer started the Saturday 08:59 session while I slept; kickoff-remote.sh runs the same script on the Mac Mini (2 sessions that weekend). Saturday 3 October, the one hand-off with no prompt from me: 21:23:28 compaction, first bell; 21:42 briefing written; 21:42:03 new tab opened.</desc>
+<defs><marker id="hl-ah-w" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="14" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#4a4a45"></path></marker><marker id="hl-ah-d" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#8a8a82"></path></marker><filter id="hl-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#141414" flood-opacity="0.15"/></filter></defs>
+<rect width="1080" height="1350" fill="#f6f6f2"/>
+<g id="hl-arrow-loop" data-step="20">
+  <path id="hl-path-loop" data-draw="" d="M88,408 L88,319" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+  <text x="106" y="358" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">the new session has its own counter:</text>
+  <text x="106" y="384" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">its first compaction rings bell #1 again</text>
+</g>
+<g id="hl-arrow-a8" data-step="18">
+  <path id="hl-path-a8" data-draw="" d="M298,770 L298,687" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+</g>
+<g id="hl-arrow-a7" data-step="16">
+  <path id="hl-path-a7" data-draw="" d="M376,950 L349,950" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+</g>
+<g id="hl-arrow-a6" data-step="14">
+  <path id="hl-path-a6" data-draw="" d="M722,982 L695,982" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+</g>
+<g id="hl-arrow-a5" data-step="12">
+  <path id="hl-path-a5" data-draw="" d="M887.0,818 L887.0,865" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+</g>
+<g id="hl-arrow-a4" data-step="10">
+  <path id="hl-path-a4" data-draw="" d="M887.0,668 L887.0,705" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+</g>
+<g id="hl-arrow-in-ask" data-step="9">
+  <path id="hl-path-in-ask" data-draw="" d="M694,616.0 L720,616.0" fill="none" stroke="#8a8a82" stroke-width="2.2" marker-end="url(#hl-ah-d)"/>
+</g>
+<g id="hl-arrow-in-rule" data-step="8">
+  <path id="hl-path-in-rule" data-draw="" d="M694,472 L720,472" fill="none" stroke="#8a8a82" stroke-width="2.2" marker-end="url(#hl-ah-d)"/>
+</g>
+<g id="hl-arrow-a3" data-step="6">
+  <path id="hl-path-a3" data-draw="" d="M887.0,366 L887.0,416" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+  <text x="873.0" y="400" font-size="22" font-weight="500" text-anchor="end" fill="#5a5a54" style="fill:#5a5a54">text in the model's context</text>
+</g>
+<g id="hl-arrow-a2" data-step="4">
+  <path id="hl-path-a2" data-draw="" d="M694,215 L721,215" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+</g>
+<g id="hl-arrow-a1" data-step="2">
+  <path id="hl-path-a1" data-draw="" d="M348,215 L375,215" fill="none" stroke="#4a4a45" stroke-width="2.4" marker-end="url(#hl-ah-w)"/>
+</g>
+<g id="hl-box-n1" data-step="1">
+  <rect x="28.5" y="140.5" width="319" height="177" rx="9.5" fill="#ecece6" stroke="#8a8a82" stroke-width="1.5"/>
+  <text x="48" y="182" font-size="26" font-weight="600" fill="#141414" style="fill:#141414">Context nears full</text>
+  <text x="48" y="220" font-size="24" fill="#333330" style="fill:#333330">auto-compaction,</text>
+  <text x="48" y="252" font-size="24" fill="#333330" style="fill:#333330">same session id</text>
+</g>
+<g id="hl-box-n2" data-step="3">
+  <rect x="376.5" y="140.5" width="317" height="177" rx="9.5" fill="#ecece6" stroke="#8a8a82" stroke-width="1.5"/>
+  <text x="396" y="182" font-size="26" font-weight="600" fill="#141414" style="fill:#141414">SessionStart hooks</text>
+  <text x="396" y="220" font-size="24" fill="#333330" style="fill:#333330">rerun with source</text>
+  <text x="396" y="252" font-size="24" fill="#333330" style="fill:#333330"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#141414" style="fill:#141414">compact</tspan>; their output</text>
+  <text x="396" y="284" font-size="24" fill="#333330" style="fill:#333330">goes into the context</text>
+</g>
+<g id="hl-box-n3" data-step="5">
+  <rect x="722.5" y="140.5" width="329" height="225" rx="9.5" fill="#ffffff" stroke="#d8d8d0" stroke-width="1"/>
+  <path d="M728.5,141.17 A9.5,9.5 0 0 0 722.5,150.0 L722.5,356.0 A9.5,9.5 0 0 0 728.5,364.83 Z" fill="#e0b13a"/>
+  <text x="748" y="180" font-size="23" font-weight="600" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#141414" style="fill:#141414">compaction-bell.sh</text>
+  <text x="748" y="214" font-size="23" fill="#333330" style="fill:#333330">one counter per session id</text>
+  <rect x="748" y="232" width="208" height="40" rx="20" fill="#f6f6f2" stroke="#d8d8d0" stroke-width="1"/>
+  <text x="764" y="259" font-size="22" fill="#333330" style="fill:#333330"><tspan font-weight="600" fill="#141414" style="fill:#141414">#1</tspan>  wrap-up bell</text>
+  <rect x="748" y="282" width="286" height="40" rx="20" fill="#f6f6f2" stroke="#d8d8d0" stroke-width="1"/>
+  <text x="764" y="309" font-size="22" fill="#333330" style="fill:#333330"><tspan font-weight="600" fill="#141414" style="fill:#141414">#2 and later</tspan><tspan font-weight="600" fill="#b13a32" style="fill:#b13a32">  HARD STOP</tspan></text>
+  <text x="748" y="350" font-size="22" fill="#55554f" style="fill:#55554f">prints text, exits 0</text>
+</g>
+<g id="hl-box-n4" data-step="7">
+  <rect x="722" y="418" width="330" height="250" rx="11" fill="#e0b13a" stroke="#141414" stroke-width="2" stroke-dasharray="10 7" filter="url(#hl-shadow)"/>
+  <text x="887.0" y="488" font-size="32" font-weight="600" text-anchor="middle" letter-spacing="2.4" fill="#141414" style="fill:#141414">THE MODEL</text>
+  <text x="887.0" y="528" font-size="32" font-weight="600" text-anchor="middle" letter-spacing="2.4" fill="#141414" style="fill:#141414">DECIDES</text>
+  <text x="887.0" y="578" font-size="24" font-weight="500" text-anchor="middle" fill="#141414" style="fill:#141414">finish the step, wrap up,</text>
+  <text x="887.0" y="610" font-size="24" font-weight="500" text-anchor="middle" fill="#141414" style="fill:#141414">hand off only when</text>
+  <text x="887.0" y="640" font-size="24" font-weight="500" text-anchor="middle" fill="#141414" style="fill:#141414">allowed</text>
+</g>
+<g id="hl-box-input-rule" data-step="8">
+  <rect x="376.5" y="420.5" width="317" height="143" rx="9.5" fill="#ffffff" stroke="#d8d8d0" stroke-width="1"/>
+  <path d="M382.5,421.17 A9.5,9.5 0 0 0 376.5,430.0 L376.5,554.0 A9.5,9.5 0 0 0 382.5,562.83 Z" fill="#e0b13a"/>
+  <text x="402" y="454" font-size="24" font-weight="600" fill="#141414" style="fill:#141414">Written authorization</text>
+  <text x="402" y="488" font-size="24" fill="#333330" style="fill:#333330">the bell's text · a briefing</text>
+  <text x="402" y="518" font-size="24" fill="#333330" style="fill:#333330">rule ('do not ride it') ·</text>
+  <text x="402" y="548" font-size="24" fill="#333330" style="fill:#333330">a goal I set</text>
+</g>
+<g id="hl-box-input-ask" data-step="9">
+  <rect x="376.5" y="576.5" width="317" height="79" rx="9.5" fill="#ffffff" stroke="#d8d8d0" stroke-width="1"/>
+  <circle cx="405" cy="594" r="6.5" fill="#55554f"/>
+  <path d="M395,618 C395,604 415,604 415,618 Z" fill="#55554f"/>
+  <text x="426" y="610" font-size="24" font-weight="600" fill="#141414" style="fill:#141414">Or I ask in one line</text>
+  <text x="396" y="640" font-size="23" fill="#333330" style="fill:#333330">4 of 5 weekend hand-offs</text>
+</g>
+<g id="hl-box-n5" data-step="11">
+  <rect x="722.5" y="706.5" width="329" height="111" rx="9.5" fill="#ffffff" stroke="#d8d8d0" stroke-width="1"/>
+  <path d="M728.5,707.17 A9.5,9.5 0 0 0 722.5,716.0 L722.5,808.0 A9.5,9.5 0 0 0 728.5,816.83 Z" fill="#e0b13a"/>
+  <text x="748" y="748" font-size="26" font-weight="600" fill="#141414" style="fill:#141414">wrapup skill</text>
+  <text x="748" y="786" font-size="24" fill="#333330" style="fill:#333330">notes updated, commit</text>
+</g>
+<g id="hl-box-n6" data-step="13">
+  <path d="M731.5,866.5 L1024,866.5 L1051.5,894 L1051.5,1088.5 A9.5,9.5 0 0 1 1042.5,1097.5 L731.5,1097.5 A9.5,9.5 0 0 1 722.5,1088.5 L722.5,875.5 A9.5,9.5 0 0 1 731.5,866.5 Z" fill="#ffffff" stroke="#d8d8d0" stroke-width="1"/>
+  <path d="M728.5,867.17 A9.5,9.5 0 0 0 722.5,876.0 L722.5,1088.0 A9.5,9.5 0 0 0 728.5,1096.83 Z" fill="#e0b13a"/>
+  <path d="M1024,866.5 L1024,894 L1051.5,894 Z" fill="#ecece6" stroke="#d8d8d0" stroke-width="1" stroke-linejoin="round"/>
+  <text x="748" y="906" font-size="26" font-weight="600" fill="#141414" style="fill:#141414">briefing file</text>
+  <text x="748" y="940" font-size="24" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#141414" style="fill:#141414">~/.claude/handoffs/</text>
+  <text x="748" y="969" font-size="24" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#141414" style="fill:#141414">&lt;date&gt;_&lt;slug&gt;.md</text>
+  <line x1="748" y1="988" x2="1032" y2="988" stroke="#d8d8d0" stroke-width="1"/>
+  <text x="748" y="1020" font-size="24" fill="#333330" style="fill:#333330">zero prior context</text>
+  <text x="748" y="1050" font-size="24" fill="#333330" style="fill:#333330">read first · state</text>
+  <text x="748" y="1080" font-size="24" fill="#333330" style="fill:#333330">done-gates · rules</text>
+</g>
+<g id="hl-box-n7" data-step="15">
+  <rect x="376.5" y="910.5" width="317" height="185" rx="9.5" fill="#ffffff" stroke="#d8d8d0" stroke-width="1"/>
+  <path d="M382.5,911.17 A9.5,9.5 0 0 0 376.5,920.0 L376.5,1086.0 A9.5,9.5 0 0 0 382.5,1094.83 Z" fill="#e0b13a"/>
+  <text x="402" y="950" font-size="23" font-weight="600" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#141414" style="fill:#141414">kickoff-session.sh</text>
+  <text x="402" y="986" font-size="24" fill="#333330" style="fill:#333330">in zellij? folder?</text>
+  <text x="402" y="1016" font-size="24" fill="#333330" style="fill:#333330">briefing not empty?</text>
+  <text x="402" y="1046" font-size="24" fill="#333330" style="fill:#333330">not done in ledger?</text>
+  <text x="402" y="1076" font-size="24" fill="#333330" style="fill:#333330">claude answers in 15 s?</text>
+</g>
+<g id="hl-box-n8" data-step="17">
+  <rect x="28.5" y="770.5" width="319" height="239" rx="9.5" fill="#141414" stroke="#141414" stroke-width="1"/>
+  <path d="M28.5,804 L28.5,780 A9.5,9.5 0 0 1 38,770.5 L338,770.5 A9.5,9.5 0 0 1 347.5,780 L347.5,804 Z" fill="#333330"/>
+  <path d="M34.5,771.17 A9.5,9.5 0 0 0 28.5,780.0 L28.5,1000.0 A9.5,9.5 0 0 0 34.5,1008.83 Z" fill="#e0b13a"/>
+  <circle cx="54" cy="787.0" r="5" fill="#8a8a82"/>
+  <circle cx="72" cy="787.0" r="5" fill="#8a8a82"/>
+  <circle cx="90" cy="787.0" r="5" fill="#8a8a82"/>
+  <text x="54" y="838" font-size="24" font-weight="600" fill="#f6f6f2" style="fill:#f6f6f2">new zellij tab</text>
+  <text x="54" y="872" font-size="24" font-weight="600" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#f6f6f2" style="fill:#f6f6f2">claude</text>
+  <text x="80" y="902" font-size="24" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#d8d8d0" style="fill:#d8d8d0">--permission-mode</text>
+  <text x="80" y="932" font-size="24" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#d8d8d0" style="fill:#d8d8d0">bypassPermissions</text>
+  <text x="80" y="962" font-size="24" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#d8d8d0" style="fill:#d8d8d0">--name &lt;tab&gt;</text>
+  <text x="80" y="992" font-size="24" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#d8d8d0" style="fill:#d8d8d0">"&lt;briefing&gt;"</text>
+</g>
+<g id="hl-sidecar" data-step="17">
+  <path d="M88,748 L88,770" fill="none" stroke="#8a8a82" stroke-width="2" stroke-dasharray="0.1 6" stroke-linecap="round"/>
+  <rect x="28" y="708" width="224" height="40" rx="20" fill="#f6f6f2" stroke="#d8d8d0" stroke-width="1"/>
+  <text x="44" y="735" font-size="22" fill="#55554f" style="fill:#55554f">sidecar: <tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" fill="#141414" style="fill:#141414">&lt;tab&gt;.id</tspan></text>
+</g>
+<g id="hl-box-n9" data-step="19">
+  <rect x="28.5" y="408.5" width="319" height="277" rx="9.5" fill="#ffffff" stroke="#4a4a45" stroke-width="2"/>
+  <path d="M28.5,542 L28.5,418 A9.5,9.5 0 0 1 38,408.5 L338,408.5 A9.5,9.5 0 0 1 347.5,418 L347.5,542 Z" fill="#ecece6"/>
+  <path d="M34.5,542 L34.5,678 A8,8 0 0 1 29.5,674 L29.5,542 Z" fill="#e0b13a"/>
+  <line x1="29" y1="542" x2="347" y2="542" stroke="#8a8a82" stroke-width="1.5"/>
+  <rect x="29" y="409" width="318" height="276" rx="9" fill="none" stroke="#4a4a45" stroke-width="2"/>
+  <text x="48" y="450" font-size="26" font-weight="600" fill="#141414" style="fill:#141414">New session</text>
+  <text x="48" y="488" font-size="24" fill="#333330" style="fill:#333330">fresh context window</text>
+  <text x="48" y="520" font-size="24" fill="#333330" style="fill:#333330">CLAUDE.md and memory</text>
+  <text x="54" y="582" font-size="24" fill="#333330" style="fill:#333330">first prompt = briefing</text>
+  <text x="54" y="614" font-size="24" fill="#333330" style="fill:#333330">workspace index added</text>
+  <text x="54" y="646" font-size="24" fill="#333330" style="fill:#333330">tab: working / waiting</text>
+</g>
+<g id="hl-side-paths" data-step="21">
+  <path id="hl-path-tail" d="M752,669 L752,692 L526,692" fill="none" stroke="#8a8a82" stroke-width="2.4" stroke-dasharray="8 7"/>
+  <text x="694" y="722" font-size="22" font-weight="500" text-anchor="end" fill="#5a5a54" style="fill:#5a5a54">old session: stays open</text>
+  <text x="694" y="748" font-size="22" font-weight="500" text-anchor="end" fill="#5a5a54" style="fill:#5a5a54">until someone closes it</text>
+  <path id="hl-path-remote" d="M654,908 L654,778" fill="none" stroke="#8a8a82" stroke-width="2.4" stroke-dasharray="8 7" marker-end="url(#hl-ah-d)"/>
+  <text x="640" y="792" font-size="22" font-weight="600" font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" text-anchor="end" fill="#5a5a54" style="fill:#5a5a54">kickoff-remote.sh:</text>
+  <text x="640" y="818" font-size="22" font-weight="500" text-anchor="end" fill="#5a5a54" style="fill:#5a5a54">same script on the</text>
+  <text x="640" y="844" font-size="22" font-weight="500" text-anchor="end" fill="#5a5a54" style="fill:#5a5a54">Mac Mini (2 sessions)</text>
+  <text x="28" y="1044" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">timer: Sat 08:59,</text>
+  <text x="28" y="1070" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">while I slept</text>
+  <path id="hl-path-timer" d="M234,1038 L374,1038" fill="none" stroke="#8a8a82" stroke-width="2.4" stroke-dasharray="8 7" marker-end="url(#hl-ah-d)"/>
+</g>
+<g id="hl-annotation" data-step="22">
+  <line x1="28" y1="1124" x2="1052" y2="1124" stroke="#d8d8d0" stroke-width="1"/>
+  <text x="28" y="1160" font-size="22" font-weight="600" fill="#141414" style="fill:#141414">Saturday 3 October, the one hand-off with no prompt from me:</text>
+  <circle cx="34" cy="1186" r="6" fill="#e0b13a" stroke="#b8901f" stroke-width="1.5"/>
+  <text x="50" y="1194" font-size="22" fill="#55554f" style="fill:#55554f"><tspan font-weight="600" fill="#141414" style="fill:#141414">21:23:28</tspan>  compaction, first bell</text>
+  <circle cx="398" cy="1186" r="6" fill="#e0b13a" stroke="#b8901f" stroke-width="1.5"/>
+  <text x="414" y="1194" font-size="22" fill="#55554f" style="fill:#55554f"><tspan font-weight="600" fill="#141414" style="fill:#141414">21:42</tspan>  briefing written</text>
+  <circle cx="698" cy="1186" r="6" fill="#e0b13a" stroke="#b8901f" stroke-width="1.5"/>
+  <text x="714" y="1194" font-size="22" fill="#55554f" style="fill:#55554f"><tspan font-weight="600" fill="#141414" style="fill:#141414">21:42:03</tspan>  new tab opened</text>
+</g>
+<g id="hl-legend" data-step="0">
+  <rect x="28.5" y="96.5" width="33" height="25" rx="5" fill="#ecece6" stroke="#8a8a82" stroke-width="1.5"/>
+  <text x="72" y="116" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">Claude Code</text>
+  <rect x="230.5" y="96.5" width="33" height="25" rx="5" fill="#ffffff" stroke="#d8d8d0" stroke-width="1"/><path d="M235.5,96.50 A5,5 0 0 0 230.5,101.5 L230.5,116.5 A5,5 0 0 0 235.5,121.50 Z" fill="#e0b13a"/>
+  <text x="274" y="116" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">my harness</text>
+  <rect x="419" y="97" width="32" height="24" rx="5" fill="#e0b13a" stroke="#141414" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="462" y="116" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">the model's decision</text>
+  <path d="M702,109 L736,109" fill="none" stroke="#8a8a82" stroke-width="2.4" stroke-dasharray="8 7"/>
+  <text x="746" y="116" font-size="22" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">side path</text>
+</g>
+<g id="hl-title-text" data-step="0">
+  <text x="28" y="59.5" font-size="34" font-weight="600" letter-spacing="-0.3" fill="#141414" style="fill:#141414">How a session hands off</text>
+</g>
+<g id="hl-caption" data-step="0">
+  <text x="28" y="1262.0" font-size="24" fill="#55554f" style="fill:#55554f">Grey is Claude Code's own behaviour, the gold-strip boxes are my harness, and</text>
+  <text x="28" y="1295.5" font-size="24" fill="#55554f" style="fill:#55554f">the dashed box is the model's decision, the only place a hand-off is chosen.</text>
+</g>
+</svg></div>
+</figure>
+
+<p>On my laptop 26 Claude Code sessions ran during the event: 14 opened on a briefing, 12 on a prompt I typed, dictated or pasted. Two more ran on the Mac Mini, spawned from the laptop, and on Saturday at 08:59 a timer opened the morning session while I slept. I count five hand-offs caused by a full context. In four, I typed a one-line request. The fifth needed no prompt: the bell rang at about 21:24 on Saturday and the next tab opened at 21:42 with a briefing that says "f9 (<code>bazaar-f9</code>) hit its compaction bell at ~21:24 and stopped." Where the logs date the bell, it took 7 to 21 minutes from bell to new tab.</p>
+
+<p>These counts and times, like the ones below, come from my own session records and logs, which aren't public; the briefings and the two scripts are.</p>
+
+<p>Design and practice don't quite match. The rule says hand off at the first bell, and the unprompted hand-off did. But only 3 of the 19 briefings carry the "do not ride it" line, all written from Saturday 20:11 on, and both Sunday hand-offs came at a session's second compaction because I asked.</p>
+
+<p>After the event, this page made its own example. On 8 October the session running its review rounds hit its fourth compaction at 13:47:14, having ridden through two hard stops. It wrote the briefing at 13:51:11, the new tab opened at 13:55:54, and the new session closed the review loop at 14:04:35. There was no prompt from me between 13:21 and 14:29; the authority was the bell text plus a standing goal I'd set at 12:49.</p>
+
+<p>What crosses over is a file, about 5 to 12 KB over the weekend. The conversation stays behind; as the docs put it, sessions are independent. The old session isn't closed either: it stays in its tab until someone closes it, and on 8 October it was still running at 15:42.</p>
+
+<p>Writing this turned up a bug. The bell's cleanup line, meant to delete counters older than 24 hours, did nothing on macOS, because <code>/tmp</code> is a symlink there and <code>find</code> needs <code>-H</code> to follow it. I fixed it the same day, in both my live hook and the served copy.</p>
+
+<p>It's the same split as the rest of the page. The harness holds the rule and the model carries it out. The briefing is the contract, the only thing that passes from one session to the next. Unlike the bots' gate, the model still makes the call here, and in the record I was usually the one who asked.</p>
 
 <h2 id="the-improvement-loop">The improvement loop</h2>
 
@@ -1530,7 +1762,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <div class="cl-card">
 <p class="cl-lead">Every number in this table traces to a public file or a GitHub query.</p>
 <details class="cl-details">
-<summary>Show the 45 claims</summary>
+<summary>Show the 72 claims</summary>
 <table>
 <thead><tr><th>Claim</th><th>Value</th><th>Source</th></tr></thead>
 <tbody>
@@ -1546,7 +1778,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <tr><td data-label="Claim">From Sunday, dealer buys leave out the album-page bonus</td><td data-label="Value" class="num">min(server value, book x set multiplier x copy marginal)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/dealer_client.py#L290-L291" target="_blank" rel="noopener">agent/dealer_client.py:290-291</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/dealer_client.py#L293-L295" target="_blank" rel="noopener">agent/dealer_client.py:293-295</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/commit/51f382c50015ea854ce0d7cbdae1842f85df0ec2" target="_blank" rel="noopener">commit 51f382c</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/commit/b3553b6d1fa4baae9b752725cf8ae99a95e5b53f" target="_blank" rel="noopener">commit b3553b6</a></td></tr>
 <tr><td data-label="Claim">Market desk limit: server value with a safety margin</td><td data-label="Value" class="num">Margin max(3, 10% of value) by default; value from the server, cached until holdings change</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/market_desk.py#L167-L170" target="_blank" rel="noopener">agent/market_desk.py:167-170</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/market_desk.py#L430-L433" target="_blank" rel="noopener">agent/market_desk.py:430-433</a></td></tr>
 <tr><td data-label="Claim">Shared instructions file says "the model writes the words"</td><td data-label="Value" class="num">Written Sat 3 Oct 00:24, still at the pinned commit</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/CLAUDE.md#L10" target="_blank" rel="noopener">CLAUDE.md:10</a></td></tr>
-<tr><td data-label="Claim">The bots never had a model: fixed lines from the first bot commit</td><td data-label="Value" class="num">BUY_LINES and SELL_LINES in rotation; no model call in agent/</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/commit/a403e8185972adc5da4d25afb943e0a3232db653" target="_blank" rel="noopener">commit a403e81</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/README.md#L13" target="_blank" rel="noopener">README.md:13</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/judges/judges-story_draft_v2.md#L41" target="_blank" rel="noopener">docs/judges/judges-story_draft_v2.md:41</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/reviews/codex-astra-review_2026-10-03.md#L56" target="_blank" rel="noopener">docs/reviews/codex-astra-review_2026-10-03.md:56</a></td></tr>
+<tr><td data-label="Claim">The bots never had a model: fixed lines from the first bot commit</td><td data-label="Value" class="num">BUY_LINES and SELL_LINES in rotation, first bot commit a403e81 (2026-10-02 20:54:13 +0200); no model call in agent/</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/a403e8185972adc5da4d25afb943e0a3232db653/agent/abuela.py#L62-L79" target="_blank" rel="noopener">agent/abuela.py:62-79 at a403e81</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/README.md#L13" target="_blank" rel="noopener">README.md:13</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/judges/judges-story_draft_v2.md#L41" target="_blank" rel="noopener">docs/judges/judges-story_draft_v2.md:41</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/reviews/codex-astra-review_2026-10-03.md#L56" target="_blank" rel="noopener">docs/reviews/codex-astra-review_2026-10-03.md:56</a></td></tr>
 <tr><td data-label="Claim">Duel talk shrinks the deal; a duel price travels inside a message</td><td data-label="Value" class="num">Rule and endpoint</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/kit/RULES.md#L90" target="_blank" rel="noopener">kit/RULES.md:90</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/kit/RULES.md#L91" target="_blank" rel="noopener">kit/RULES.md:91</a></td></tr>
 <tr><td data-label="Claim">Duel bot silent by default; one number per message</td><td data-label="Value" class="num">Strategy docstring</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/duel.py#L31" target="_blank" rel="noopener">agent/duel.py:31</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/duel.py#L46" target="_blank" rel="noopener">agent/duel.py:46</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/duel.py#L21-L22" target="_blank" rel="noopener">agent/duel.py:21-22</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/duel.py#L3" target="_blank" rel="noopener">agent/duel.py:3</a></td></tr>
 <tr><td data-label="Claim">Pull requests merged in 48 hours</td><td data-label="Value" class="num">107<span class="cl-note">99 by the freeze, 107 by the end of the event; SUBMISSION.md counts to the freeze</span></td><td data-label="Source"><code>repo:thiagoamaro91/negotiation-agent is:pr is:merged merged:2026-10-02T16:00:00Z..2026-10-04T16:00:00Z</code> <a href="https://github.com/search?q=repo%3Athiagoamaro91%2Fnegotiation-agent+is%3Apr+is%3Amerged+merged%3A2026-10-02T16%3A00%3A00Z..2026-10-04T16%3A00%3A00Z&amp;type=pullrequests" target="_blank" rel="noopener">GitHub search</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L12" target="_blank" rel="noopener">SUBMISSION.md:12</a></td></tr>
@@ -1571,12 +1803,39 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <tr><td data-label="Claim">Bot settings can only lower the limit</td><td data-label="Value" class="num">min(limit, cap)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/abuela.py#L399-L401" target="_blank" rel="noopener">agent/abuela.py:399-401</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/chato.py#L624-L626" target="_blank" rel="noopener">agent/chato.py:624-626</a></td></tr>
 <tr><td data-label="Claim">Desk page bids never above the cap or value minus margin</td><td data-label="Value" class="num">Page bid ceiling</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/market_desk.py#L63" target="_blank" rel="noopener">agent/market_desk.py:63</a></td></tr>
 <tr><td data-label="Claim">Friday: every dealer-bot run approved by the owner</td><td data-label="Value" class="num">Owner go per run</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md#L5" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md:5</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md#L31" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md:31</a></td></tr>
+<tr><td data-label="Claim">The bell hook, and so the hand-off habit, dates from July</td><td data-label="Value" class="num">2026-07-08</td><td data-label="Source"><a href="compaction-bell.sh.txt#L4" target="_blank" rel="noopener">compaction-bell.sh:4</a><br><a href="compaction-bell.sh.txt#L7" target="_blank" rel="noopener">compaction-bell.sh:7</a></td></tr>
+<tr><td data-label="Claim">Compaction clears older tool outputs, then summarizes; early instructions may be lost</td><td data-label="Value" class="num">Official behaviour</td><td data-label="Source"><a href="https://code.claude.com/docs/en/how-claude-code-works" target="_blank" rel="noopener">Claude Code docs: how-claude-code-works</a></td></tr>
+<tr><td data-label="Claim">When compaction happens is a setting; the weekend's value is not recorded</td><td data-label="Value" class="num">autoCompactWindow</td><td data-label="Source"><a href="https://code.claude.com/docs/en/settings-reference" target="_blank" rel="noopener">Claude Code docs: settings-reference</a></td></tr>
+<tr><td data-label="Claim">SessionStart hooks rerun after each compaction, auto or manual, with source "compact"</td><td data-label="Value" class="num">Matcher compact</td><td data-label="Source"><a href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">Claude Code docs: hooks</a></td></tr>
+<tr><td data-label="Claim">What a hook prints goes into the model's context</td><td data-label="Value" class="num">stdout</td><td data-label="Source"><a href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">Claude Code docs: hooks</a></td></tr>
+<tr><td data-label="Claim">The hook is 30 lines</td><td data-label="Value" class="num">30 as it ran (served copy 34: 4-line header added)</td><td data-label="Source"><a href="compaction-bell.sh.txt" target="_blank" rel="noopener">compaction-bell.sh (lines 1 and 6-34 as it ran)</a></td></tr>
+<tr><td data-label="Claim">It counts compactions per session id in a file under /tmp</td><td data-label="Value" class="num">One counter per session id</td><td data-label="Source"><a href="compaction-bell.sh.txt#L16-L20" target="_blank" rel="noopener">compaction-bell.sh:16-20</a></td></tr>
+<tr><td data-label="Claim">First compaction: a wrap-up bell</td><td data-label="Value" class="num">#1</td><td data-label="Source"><a href="compaction-bell.sh.txt#L25-L27" target="_blank" rel="noopener">compaction-bell.sh:25-27</a></td></tr>
+<tr><td data-label="Claim">Second compaction and later: a hard stop</td><td data-label="Value" class="num">#2 and later</td><td data-label="Source"><a href="compaction-bell.sh.txt#L29-L31" target="_blank" rel="noopener">compaction-bell.sh:29-31</a></td></tr>
+<tr><td data-label="Claim">The hook only prints text and exits; nothing in code moves a session</td><td data-label="Value" class="num">exit 0</td><td data-label="Source"><a href="compaction-bell.sh.txt#L25-L34" target="_blank" rel="noopener">compaction-bell.sh:25-34</a></td></tr>
+<tr><td data-label="Claim">Each compaction cycle grows the context back and pays for the whole climb again</td><td data-label="Value" class="num">Rationale</td><td data-label="Source"><a href="compaction-bell.sh.txt#L27" target="_blank" rel="noopener">compaction-bell.sh:27</a></td></tr>
+<tr><td data-label="Claim">Three of the 19 briefings carry the "do not ride it" rule</td><td data-label="Value" class="num">3 of 19</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-03_bazaar-f9.md#L59" target="_blank" rel="noopener">2026-10-03_bazaar-f9.md:59</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-04_bazaar-sunday-0830.md#L19" target="_blank" rel="noopener">2026-10-04_bazaar-sunday-0830.md:19</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-03_bazaar-f10.md#L17" target="_blank" rel="noopener">2026-10-03_bazaar-f10.md:17</a></td></tr>
+<tr><td data-label="Claim">19 briefings, all published in the repo</td><td data-label="Value" class="num">19</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L139" target="_blank" rel="noopener">SUBMISSION.md:139</a></td></tr>
+<tr><td data-label="Claim">12 of the 19 open by telling the reader it is a fresh session with zero prior context</td><td data-label="Value" class="num">12 of 19 (3 word for word)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings" target="_blank" rel="noopener">session-briefings/ (19 files)</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md#L3" target="_blank" rel="noopener">2026-10-02_bazaar-abuela-queue.md:3</a></td></tr>
+<tr><td data-label="Claim">The other 7 name the role and the session they replace; all list what to read first or the state, plus rules and checkpoints</td><td data-label="Value" class="num">7 of 19</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings" target="_blank" rel="noopener">session-briefings/ (19 files)</a></td></tr>
+<tr><td data-label="Claim">The spawn script needs zellij, an existing folder and a non-empty briefing</td><td data-label="Value" class="num">Three checks</td><td data-label="Source"><a href="kickoff-session.sh.txt#L31-L33" target="_blank" rel="noopener">kickoff-session.sh:31-33</a></td></tr>
+<tr><td data-label="Claim">It refuses a briefing whose title names an item the ledger marks done</td><td data-label="Value" class="num">DONE or DISCARDED</td><td data-label="Source"><a href="kickoff-session.sh.txt#L39-L48" target="_blank" rel="noopener">kickoff-session.sh:39-48</a></td></tr>
+<tr><td data-label="Claim">It checks that the claude binary answers --version within 15 seconds</td><td data-label="Value" class="num">15 s</td><td data-label="Source"><a href="kickoff-session.sh.txt#L58-L59" target="_blank" rel="noopener">kickoff-session.sh:58-59</a></td></tr>
+<tr><td data-label="Claim">It opens a named zellij tab running claude --permission-mode bypassPermissions --name &lt;tab&gt;</td><td data-label="Value" class="num">One named tab</td><td data-label="Source"><a href="kickoff-session.sh.txt#L68-L71" target="_blank" rel="noopener">kickoff-session.sh:68-71</a></td></tr>
+<tr><td data-label="Claim">The briefing is one argument and arrives as the first prompt of an interactive session</td><td data-label="Value" class="num">One argv element</td><td data-label="Source"><a href="kickoff-session.sh.txt#L8-L9" target="_blank" rel="noopener">kickoff-session.sh:8-9</a></td></tr>
+<tr><td data-label="Claim">A sidecar file keeps the tab id; a status hook renames the tab by session state</td><td data-label="Value" class="num">One sidecar per tab</td><td data-label="Source"><a href="kickoff-session.sh.txt#L61-L62" target="_blank" rel="noopener">kickoff-session.sh:61-62</a><br><a href="kickoff-session.sh.txt#L73-L78" target="_blank" rel="noopener">kickoff-session.sh:73-78</a></td></tr>
+<tr><td data-label="Claim">The new session starts with a fresh context window</td><td data-label="Value" class="num">Official behaviour</td><td data-label="Source"><a href="https://code.claude.com/docs/en/how-claude-code-works" target="_blank" rel="noopener">Claude Code docs: how-claude-code-works</a></td></tr>
+<tr><td data-label="Claim">Saturday: the bell rang at about 21:24 and the session stopped</td><td data-label="Value" class="num">About 21:24</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-03_bazaar-f10.md#L3" target="_blank" rel="noopener">2026-10-03_bazaar-f10.md:3</a></td></tr>
+<tr><td data-label="Claim">What crosses over is a file of about 5 to 12 KB</td><td data-label="Value" class="num">4,697 to 12,149 bytes across the 19 briefings</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings" target="_blank" rel="noopener">session-briefings/ (19 files)</a><br><code>git show ac7ed2a:&lt;file&gt; | wc -c</code></td></tr>
+<tr><td data-label="Claim">The conversation is not carried over; sessions are independent</td><td data-label="Value" class="num">Official behaviour</td><td data-label="Source"><a href="https://code.claude.com/docs/en/how-claude-code-works" target="_blank" rel="noopener">Claude Code docs: how-claude-code-works</a></td></tr>
+<tr><td data-label="Claim">The cleanup line did nothing on macOS (/tmp is a symlink; find needs -H); the served copy has the fix</td><td data-label="Value" class="num">-H</td><td data-label="Source"><a href="compaction-bell.sh.txt#L4-L5" target="_blank" rel="noopener">compaction-bell.sh:4-5</a><br><a href="compaction-bell.sh.txt#L23" target="_blank" rel="noopener">compaction-bell.sh:23</a></td></tr>
+<tr><td data-label="Claim">The cleanup was meant to delete counters older than 24 hours</td><td data-label="Value" class="num">24 h</td><td data-label="Source"><a href="compaction-bell.sh.txt#L22" target="_blank" rel="noopener">compaction-bell.sh:22</a></td></tr>
 <tr><td data-label="Claim">Saturday zero-score Market Test and its fix</td><td data-label="Value" class="num">Scored 0; fixed in PR #22</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L111" target="_blank" rel="noopener">SUBMISSION.md:111</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L336" target="_blank" rel="noopener">SUBMISSION.md:336</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/analysis-saturday/README.md#L24" target="_blank" rel="noopener">docs/analysis-saturday/README.md:24</a></td></tr>
 <tr><td data-label="Claim">PRs merged overnight</td><td data-label="Value" class="num">14</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/judges/team3-dossier.md#L268" target="_blank" rel="noopener">evidence dossier, line 268</a></td></tr>
 <tr><td data-label="Claim">Codex reviews on selected PRs, some merges unreviewed</td><td data-label="Value" class="num">Selected PRs reviewed; #105 to #108 merged without a completed review</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/judges/team3-dossier.md#L102" target="_blank" rel="noopener">evidence dossier, line 102</a></td></tr>
 <tr><td data-label="Claim">The Sunday analyst never held a key</td><td data-label="Value" class="num">No key, no message, no offer</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/plans/sunday-analyst.md#L3" target="_blank" rel="noopener">docs/plans/sunday-analyst.md:3</a></td></tr>
 <tr><td data-label="Claim">Team bus on a GitHub issue</td><td data-label="Value" class="num">Issue #25 carries messages between Claude sessions</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/tools/bus.py#L1" target="_blank" rel="noopener">tools/bus.py:1</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L137" target="_blank" rel="noopener">SUBMISSION.md:137</a></td></tr>
-<tr><td data-label="Claim">Friday game opened late; first deal before 21:00</td><td data-label="Value" class="num">About 20:20 instead of 19:00; first deal in a 20:54 commit</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/findings.md#L45" target="_blank" rel="noopener">docs/findings.md:45</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/commit/a403e8185972adc5da4d25afb943e0a3232db653" target="_blank" rel="noopener">commit a403e81</a></td></tr>
+<tr><td data-label="Claim">Friday game opened late; first deal before 21:00</td><td data-label="Value" class="num">About 20:20 instead of 19:00; first deal in commit a403e81, 2026-10-02 20:54:13 +0200</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/findings.md#L45" target="_blank" rel="noopener">docs/findings.md:45</a><br><code>git show -s --format=%ci a403e81</code> in the public repo</td></tr>
 <tr><td data-label="Claim">Duel deals outside our limit, whole weekend</td><td data-label="Value" class="num">0 of 163 (202 duels with a logged result)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/logs/duel" target="_blank" rel="noopener">logs/duel/2026-10-03.jsonl and 2026-10-04.jsonl</a><br><a href="live_audit.py" target="_blank" rel="noopener">audit script</a></td></tr>
 <tr><td data-label="Claim">Offers that swapped in a different card mid-thread, accepted</td><td data-label="Value" class="num">0 of 13 (9 cancelled, 2 expired, 2 never settled in the feed)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/logs/picaros/2026-10-04.jsonl" target="_blank" rel="noopener">logs/picaros/2026-10-04.jsonl</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/logs/threads" target="_blank" rel="noopener">logs/threads/</a><br><a href="live_audit.py" target="_blank" rel="noopener">audit script</a></td></tr>
 </tbody>
@@ -1605,14 +1864,17 @@ other bots was never parsed for terms, so it could not change a price or an acce
 dealer bot read it only to flag offers whose words contradicted their terms). Claude Code
 wrote almost all the code, including the bots' chat lines, ahead of time.
 
-Orchestration: Claude Code sessions worked one level above the bots, each started from a
-written hand-off briefing (19 are published in the repo). One conductor session at a time
-decided which bot ran, with which settings and when. A read-only monitor session relayed the
-humans. An analyst session that never held the team key read the logs and proposed changes as
-pull requests. A GitHub issue served as a message bus between Thiago's and Hector's Claude
-sessions. 107 pull requests were merged in 48 hours. From Saturday 16:00 no human approved
-individual trades; on Sunday, from the plan approval at 11:52 to the close, the conductor ran
-with no human gates inside the game.
+Orchestration: Claude Code sessions worked one level above the bots; most of Thiago's started
+from a written hand-off briefing (19 are published in the repo). A hook rang a bell after
+each context compaction. Five times a session that had run out of context wrote the next
+briefing and spawned its successor in a new terminal tab; four of those hand-offs came at
+Thiago's one-line request. One conductor session at a time decided which bot ran, with which
+settings and when. A read-only monitor session relayed the humans. An analyst session that
+never held the team key read the logs and proposed changes as pull requests. A GitHub issue
+served as a message bus between Thiago's and Hector's Claude sessions. 107 pull requests were
+merged in 48 hours. From Saturday 16:00 no human approved individual trades; on Sunday, from
+the plan approval at 11:52 to the close, the conductor ran with no human gates inside the
+game.
 
 Improvement loop: candidate settings were tested on offline evals that replay recorded cases
 with no network, no key and no model. Each acceptance rule was written before its run. For
