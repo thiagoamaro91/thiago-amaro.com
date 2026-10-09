@@ -83,7 +83,7 @@
 
     /* gaps in the recording */
     var gp = $('gaps'), ts = D.t, i;
-    var NIGHT = 300, GAPLAB = [[600, ['our side kept working:','first bots built,','weekend plan drafted']], [2000, ['our side kept working:','14 pull requests merged','between 01:30 and 04:52,','duel and broker searches','running on the VM']]];
+    var NIGHT = 300, GAPLAB = [[600, ['our side kept working:','first bots built,','weekend plan drafted']], [2000, ['our side kept working:','14 pull requests merged','between 01:47 and 04:51,','duel and broker searches','running on the VM']]];
     var gl = [[0, ts[0]]];
     for (i = 1; i < ts.length; i++) if (ts[i] - ts[i - 1] > 45) gl.push([ts[i - 1], ts[i]]);
     gl.forEach(function (q) {
@@ -122,10 +122,10 @@
     /* events: label lines, row (0 upper, 1 lower), anchor */
     var EV = [
  {t:188,  day:"Fri 21:08",      l:["first pull request","opened"],                    row:1,a:"start"},
- {t:923,  day:"Sat 09:23-09:33",l:["eight PRs merged","in ten minutes"],             row:0,a:"end"},
  {t:1070, day:"Sat 11:50",      l:["scored test: broker","matched nothing;","fix live 12:05"],row:0,a:"start"},
+ {t:1098, day:"Sat 12:18",      l:["team bus live;","16th on the board"],           row:1,a:"end",dx:14},
  {t:1320, day:"Sat 16:00",      l:["one conductor; no","human approval","per trade from here"],row:1,a:"start"},
- {t:1890, day:"Sun 01:30-04:52",l:["fourteen PRs","merged overnight"],               row:0,a:"start"},
+ {t:1907, day:"Sun 01:47-04:51",l:["fourteen PRs","merged overnight"],               row:0,a:"start"},
  {t:2512, day:"Sun 11:52",      l:["plan approved;","11:55 to 15:01","no human gates"],row:1,a:"end"},
  {t:2700, day:"Sun 15:00",      l:["freeze"],                                        row:0,a:"end"}
 ];
@@ -135,7 +135,7 @@
       var ln = el('line', { x1: x, x2: x, y1: bottom, y2: AX, stroke: 'var(--muted)', 'stroke-width': 1.2, 'stroke-dasharray': '2 5', 'stroke-opacity': .8 }, evl);
       ln.setAttribute('class', 'ev');
       var gr = el('g', { 'class': 'ev' }, evg);
-      var off = e.a == 'end' ? -8 : 8;
+      var off = (e.a == 'end' ? -1 : 1) * (e.dx || 8);
       tx(gr, x + off, top + 14, 17, e.a, e.day, { fill: 'var(--rp-head)', 'font-weight': 600 });
       e.l.forEach(function (s, k) { tx(gr, x + off, top + 14 + LH * (k + 1), 17, e.a, s, { fill: 'var(--body)' }); });
       el('circle', { 'class': 'dot', cx: x, cy: AX, r: 7, fill: 'var(--accent)', stroke: 'var(--card)', 'stroke-width': 2 }, gr);

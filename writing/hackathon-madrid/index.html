@@ -84,7 +84,8 @@ gate.
 
 Author's part: Thiago designed the conductor setup, ran the conductor sessions on his side
 (each handed off through a written briefing) and owned the strategy; on Friday he built the
-first dealer bot and the team dashboard. Hector built the evals and more of the code.
+first dealer bot and the team dashboard. Thiago and Hector built the evals through Claude Code's
+claude-api skill, and gated changes on hill-climbing them.
 
 Lesson (the author's view): a deterministic core makes the search for improvements cheap and
 repeatable; a model in the decision loop makes it harder and costlier, not impossible. The
@@ -129,7 +130,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <h2 id="the-money-path">The money path</h2>
 
 <figure class="fig fig-diagram" data-fig="diagram-1" role="group" aria-label="Diagram: the bots&#x27; money path">
-<div class="pan"><svg id="d1-diagram-money-path" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="100%" role="img" aria-labelledby="d1-title d1-desc" font-family="Inter, sans-serif" fill="#333330">
+<div class="pan"><svg class="fig-desk" id="d1-diagram-money-path" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="100%" role="img" aria-labelledby="d1-title d1-desc" font-family="Inter, sans-serif" fill="#333330">
 <title id="d1-title">The bots' money path: one plain-Python gate</title>
 <desc id="d1-desc">In the bots, no model sits between an offer and an accept. Claude Code wrote almost all the code and the lines; Python makes every call.</desc>
 <defs><marker id="d1-ah-w" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="12" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#4a4a45"></path></marker><marker id="d1-ah-m" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="15" markerHeight="13" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#141414"></path></marker><marker id="d1-ah-t" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#8a8a82"></path></marker><marker id="d1-ah-d" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="11" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#8a8a82"></path></marker><filter id="d1-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#141414" flood-opacity="0.15"/></filter></defs>
@@ -332,6 +333,153 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
   <text font-size="20" font-weight="500" fill="#5a5a54" style="fill:#5a5a54">
     <tspan x="423" y="1024">public feed</tspan>
   </text>
+</g>
+</svg><svg class="fig-phone" id="d1p-diagram-money-path-phone" xmlns="http://www.w3.org/2000/svg" data-variant="phone" viewBox="0 0 640 2216" width="100%" role="img" aria-labelledby="d1p-title d1p-desc">
+<title id="d1p-title">The bots' money path: one plain-Python gate</title>
+<desc id="d1p-desc">In the bots, no model sits between an offer and an accept. Claude Code wrote almost all the code and the lines; Python makes every call.</desc>
+<defs><marker id="d1p-ah-w" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="14" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-body)"/></marker><marker id="d1p-ah-m" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="15" markerHeight="13" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-head)"/></marker><marker id="d1p-ah-d" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-muted)"/></marker></defs>
+<g id="d1p-g-title" data-step="0">
+  <text x="28" y="46" font-size="32" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">The bots' money path: one</text>
+  <text x="28" y="84" font-size="32" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">plain-Python gate</text>
+</g>
+<g id="d1p-region-macmini" data-step="1">
+  <rect x="24" y="120" width="592" height="1318" rx="13" style="fill:none;stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="42" y="154" font-size="22" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">Mac Mini (keyed bots)</text>
+</g>
+<g id="d1p-box-keepers" data-step="2">
+  <rect x="40" y="176" width="312" height="190" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="216" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Restart keepers (tmux):</tspan></text>
+  <text x="58" y="248" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">16 processes, config</text>
+  <text x="58" y="280" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">re-read before every</text>
+  <text x="58" y="312" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">start</text>
+</g>
+<g id="d1p-box-chat" data-step="3">
+  <rect x="368" y="176" width="232" height="190" rx="10" style="fill:var(--f-bg);stroke:var(--f-muted)" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="386" y="216" font-size="22" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Chat lines:</tspan></text>
+  <text x="386" y="248" font-size="22" fill="var(--f-body)" style="fill:var(--f-body)">pre-written in</text>
+  <text x="386" y="280" font-size="22" fill="var(--f-body)" style="fill:var(--f-body)">code by Claude</text>
+  <text x="386" y="312" font-size="22" fill="var(--f-body)" style="fill:var(--f-body)">Code, picked by</text>
+  <text x="386" y="344" font-size="22" fill="var(--f-body)" style="fill:var(--f-body)">rotation</text>
+</g>
+<g id="d1p-arrow-keepers-bots" data-step="4">
+  <path id="d1p-path-keepers-bots" d="M196,368 L196,430" fill="none" style="stroke:var(--f-muted)" stroke-width="1.8" stroke-linecap="round" marker-end="url(#d1p-ah-d)"/>
+</g>
+<g id="d1p-arrow-chat-bots" data-step="4">
+  <path id="d1p-path-chat-bots" d="M484,368 L484,430" fill="none" style="stroke:var(--f-muted)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="0.1 7" marker-end="url(#d1p-ah-d)"/>
+</g>
+<g id="d1p-label-chat" data-step="4">
+  <text x="470.0" y="396" font-size="20" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">text only,</text>
+  <text x="470.0" y="420" font-size="20" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">decides nothing</text>
+</g>
+<g id="d1p-region-bots" data-step="5">
+  <rect x="40" y="438" width="560" height="216" rx="11" style="fill:none;stroke:var(--f-muted)" stroke-width="1.5" stroke-dasharray="5 4"/>
+</g>
+<g id="d1p-box-dealer" data-step="6">
+  <rect x="52" y="450" width="536" height="56" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="70" y="486" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Dealer bots</tspan></text>
+</g>
+<g id="d1p-box-duel" data-step="6">
+  <rect x="52" y="518" width="536" height="56" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="70" y="554" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Duel bot</tspan> (price + delivery day)</text>
+</g>
+<g id="d1p-box-market" data-step="6">
+  <rect x="52" y="586" width="536" height="56" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="70" y="622" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Market desk</tspan> (team-to-team trades)</text>
+</g>
+<g id="d1p-box-offer" data-step="8">
+  <rect x="40" y="698" width="256" height="94" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="738" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Structured offer:</tspan></text>
+  <text x="58" y="770" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">give / want only</text>
+</g>
+<g id="d1p-box-limit" data-step="8">
+  <rect x="344" y="698" width="256" height="158" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="362" y="738" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Our limit:</tspan> private</text>
+  <text x="362" y="770" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">value per card, or</text>
+  <text x="362" y="802" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">the server's</text>
+  <text x="362" y="834" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">per-duel limit</text>
+</g>
+<g id="d1p-arrow-bots-hero" data-step="7">
+  <path id="d1p-path-bots-hero" d="M320,656 L320,892" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d1p-ah-w)"/>
+</g>
+<g id="d1p-arrow-offer-hero" data-step="9">
+  <path id="d1p-path-offer-hero" d="M168,794 L168,892" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d1p-ah-w)"/>
+</g>
+<g id="d1p-arrow-limit-hero" data-step="9">
+  <path id="d1p-path-limit-hero" d="M472,858 L472,892" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d1p-ah-w)"/>
+</g>
+<g id="d1p-hero" data-step="10">
+  <rect x="40" y="900" width="560" height="182" rx="11" class="box hero"/>
+  <text x="320.0" y="952" font-size="32" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="600" letter-spacing="2.6">VALUE GATE</text>
+  <text x="320.0" y="990" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="600">plain Python, no model call</text>
+  <text x="320.0" y="1024" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle">every offer checked against our limit</text>
+  <text x="320.0" y="1058" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle">chat text never binds</text>
+</g>
+<g id="d1p-arrow-hero-lease" data-step="11">
+  <path id="d1p-path-hero-lease" d="M320,1085 L320,1118" fill="none" style="stroke:var(--f-head)" stroke-width="3" stroke-linecap="round" marker-end="url(#d1p-ah-m)"/>
+</g>
+<g id="d1p-box-lease" data-step="12">
+  <rect x="40" y="1126" width="560" height="94" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="1166" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">One accept per tick:</tspan> duel lock first, then the</text>
+  <text x="58" y="1198" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">desk's file lease. <tspan font-weight="600" style="fill:var(--f-accent)">STOP</tspan> file halts the desk.</text>
+</g>
+<g id="d1p-box-broker" data-step="13">
+  <rect x="236" y="1256" width="364" height="158" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="254" y="1296" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Broker on our venue:</tspan></text>
+  <text x="254" y="1328" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">matches other traders'</text>
+  <text x="254" y="1360" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">orders, never trades for the</text>
+  <text x="254" y="1392" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">team</text>
+</g>
+<g id="d1p-arrow-lease-game" data-step="14">
+  <path id="d1p-path-lease-game" d="M120,1223 L120,1516" fill="none" style="stroke:var(--f-head)" stroke-width="3" stroke-linecap="round" marker-end="url(#d1p-ah-m)"/>
+</g>
+<g id="d1p-label-money" data-step="14">
+  <text x="134" y="1488" font-size="20" fill="var(--f-accent)" style="fill:var(--f-accent)" font-weight="600">the bots' route to the game</text>
+</g>
+<g id="d1p-arrow-broker-game" data-step="14">
+  <path id="d1p-path-broker-game" d="M418,1416 L418,1516" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d1p-ah-w)"/>
+</g>
+<g id="d1p-label-broker" data-step="14">
+  <text x="432.0" y="1488" font-size="20" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">no team money</text>
+</g>
+<g id="d1p-region-game" data-step="15">
+  <rect x="24" y="1524" width="592" height="192" rx="13" style="fill:none;stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="42" y="1558" font-size="22" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">The game: organisers' server, HTTP API</text>
+</g>
+<g id="d1p-box-game-activity" data-step="16">
+  <rect x="40" y="1576" width="560" height="56" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="1612" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Dealers, duels, market tests, team trades</text>
+</g>
+<g id="d1p-box-other-teams" data-step="16">
+  <rect x="40" y="1644" width="560" height="56" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="1680" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Other teams' bots: free to lie</text>
+</g>
+<g id="d1p-arrow-game-feed-recorder" data-step="17">
+  <path id="d1p-path-game-feed-recorder" d="M320,1718 L320,1772" fill="none" style="stroke:var(--f-muted)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="0.1 7" marker-end="url(#d1p-ah-d)"/>
+</g>
+<g id="d1p-label-feed" data-step="17">
+  <text x="334.0" y="1756" font-size="20" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">public feed</text>
+</g>
+<g id="d1p-region-keyless" data-step="18">
+  <rect x="24" y="1780" width="592" height="296" rx="13" style="fill:var(--f-alt);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="42" y="1814" font-size="22" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">Read-only side (no trades)</text>
+</g>
+<g id="d1p-box-feed-recorder" data-step="19">
+  <rect x="40" y="1832" width="560" height="94" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="1872" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Feed recorder + logs (keys scrubbed on</text>
+  <text x="58" y="1904" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">write)</text>
+</g>
+<g id="d1p-box-dashboards" data-step="21">
+  <rect x="40" y="1966" width="560" height="94" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="2006" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Live dashboard (read-only), analyst and</text>
+  <text x="58" y="2038" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">offline tools (keyless)</text>
+</g>
+<g id="d1p-arrow-feed-recorder-dashboards" data-step="20">
+  <path id="d1p-path-feed-recorder-dashboards" d="M320,1928 L320,1958" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d1p-ah-w)"/>
+</g>
+<g id="d1p-caption" data-step="22">
+  <text x="28" y="2126" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">In the bots, no model sits between an offer and an</text>
+  <text x="28" y="2156" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">accept. Claude Code wrote almost all the code and the</text>
+  <text x="28" y="2186" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">lines; Python makes every call.</text>
 </g>
 </svg></div>
 </figure>
@@ -1098,7 +1246,9 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 </svg></div>
 </figure>
 
-<p>Above the bots, the work ran in Claude Code sessions. Most on my side started from a written briefing, nineteen of which are in the repo, and a session that ran out of context wrote the briefing for the next one. Hector's sessions and mine ran on two different Claude accounts, and they talked through a team bus he built.</p>
+<p>Above the bots, the work ran in Claude Code sessions. Most on my side started from a written briefing, nineteen of which are in the repo, and a session that ran out of context wrote the briefing for the next one. Hector's sessions and mine talked through a team bus he built.</p>
+
+<p>Hector built the bus because our sessions ran on two Claude accounts, and because by Saturday midday the two of us had become the gate between our own agents: every technical question between his sessions and mine went through one of us. Once the sessions could talk to each other with little from us in the middle, we could spend our time on the architecture while the agents settled how things would work in practice. The board turned around the same time: 16th when the bus went live at 12:18 on Saturday; by 17:30, after the 16:00 reset to one conductor, we were 4th, and 4th is where it closed on Sunday.</p>
 
 <figure class="fig" data-fig="team-bus" data-step-ms="380" role="group" aria-label="Diagram: the team bus between two Claude accounts">
 <div class="fig-card" style="max-width:640px;margin:0 auto"><svg id="tb-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1340" width="100%" role="img" aria-labelledby="tb-title tb-desc">
@@ -1209,7 +1359,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 
 <g class="tb-packets"></g>
 </svg></div>
-<figcaption>Hector built the bus because our sessions ran on two Claude accounts, and Claude Code's own messaging stays inside one: a message is a comment on one GitHub issue, picked up by a background poll on the other side. Whatever arrived was data to weigh, never a yes from the reading session's own operator.</figcaption>
+<figcaption>A message is a comment on one GitHub issue, picked up by a background poll on the other side. Whatever arrived was data to weigh, never a yes from the reading session's own operator.</figcaption>
 <script>
 (function () {
   var reg = function (n, h) { (window.FigureQ = window.FigureQ || []).push([n, h]); };
@@ -1336,12 +1486,12 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <figcaption>While I was out of quota until 07:00, Hector and one orchestrating session merged fourteen pull requests between 01:47 and 04:51.</figcaption>
 </figure>
 
-<p>Sunday's final window was the cleanest part of the weekend. A planner session wrote the final plan from the scoring evidence and stopped, and one conductor session carried it to the close.</p>
+<p>Sunday's final window was the cleanest part of the weekend. I spent close to two hours going back and forth with Claude on the plan, long enough that Hector thought I had moved on to the presentation. Once the plan looked tidy, implementation kicked off and none of us touched the bots again: one conductor session carried the plan to the close, Hector moved on to our trading venue, and I started the presentation for the judges.</p>
 
 <figure class="fig fig-diagram" data-fig="sunday-conductor" data-step-ms="380" role="group" aria-label="Diagram: how one conductor session ran Sunday's last three hours">
 <div class="pan" style="max-width:680px;margin:0 auto"><svg id="sc-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 1474" width="100%" role="img" aria-labelledby="sc-title sc-desc">
 <title id="sc-title">Sunday 4 October: one conductor, three hours</title>
-<desc id="sc-desc">A timeline across the top: 11:52 the plan is approved, 11:55 the conductor session starts, a quiet window from 12:28 to 12:45 when no bot run may start, 15:00 the game closes, 15:01 the result is recorded. Below it, one path top to bottom. The approved plan, sunday-final-plan.md, written by a planner session that then stopped: a ceiling for each card we want and a floor for each card we sell, both on the right side of the card's value to us. Approval at 11:52 authorised every in-game move inside those rules, so there were no human gates after it. The conductor: one Claude Code session on the Mac Mini, the only Opus session, no Opus subagents, Haiku subagents only for reading bulk logs. It sets parameters, queues runs, flags offers and edits configuration lines; when the run needs a number the plan did not write down, it sets it from the plan's rules. It queues runs as plain bash scripts in tmux windows on the Mini, such as logs/conductor/queue_a.sh, one bot step at a time, with a gate that waits out the 12:28 to 12:45 quiet window. There is no queue service and no runner, and queued runs keep going if tokens run out. The scripts start the dealer bots, agent/chato.py and agent/abuela.py, which use no model and move the money. Every offer passes two checks in the bots' code: the limit from the plan (a ceiling to buy, a floor to sell) and a value gate, book value times our set multiplier, re-read live from the server's /api/me before every priced message and every accept. An offer that passes both becomes a deal on the game server. An offer whose structure does not match the negotiated deal is never accepted; when its words name our card and its structure gives another, the bot flags the message. That flag path was patched into agent/chato.py live at about 12:10 (the backup file is named chato.py.bak-1210) and reached the repository after the event, in commit 68f3d51.</desc>
+<desc id="sc-desc">A timeline across the top: 11:52 the plan is approved, 11:55 the conductor session starts, a quiet window from 12:28 to 12:45 when no bot run may start, 15:00 the game closes, 15:01 the result is recorded. Below it, one path top to bottom. The approved plan, sunday-final-plan.md, written in a long back-and-forth between the author and Claude, approved 11:52: a ceiling for each card we want and a floor for each card we sell, both on the right side of the card's value to us. Approval at 11:52 authorised every in-game move inside those rules, so there were no human gates after it. The conductor: one Claude Code session on the Mac Mini, the only Opus session, no Opus subagents, Haiku subagents only for reading bulk logs. It sets parameters, queues runs, flags offers and edits configuration lines; when the run needs a number the plan did not write down, it sets it from the plan's rules. It queues runs as plain bash scripts in tmux windows on the Mini, such as logs/conductor/queue_a.sh, one bot step at a time, with a gate that waits out the 12:28 to 12:45 quiet window. There is no queue service and no runner, and queued runs keep going if tokens run out. The scripts start the dealer bots, agent/chato.py and agent/abuela.py, which use no model and move the money. Every offer passes two checks in the bots' code: the limit from the plan (a ceiling to buy, a floor to sell) and a value gate, book value times our set multiplier, re-read live from the server's /api/me before every priced message and every accept. An offer that passes both becomes a deal on the game server. An offer whose structure does not match the negotiated deal is never accepted; when its words name our card and its structure gives another, the bot flags the message. That flag path was patched into agent/chato.py live at about 12:10 (the backup file is named chato.py.bak-1210) and reached the repository after the event, in commit 68f3d51.</desc>
 <defs><marker id="sc-ah" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L12,5 L0,10 z"/></marker><marker id="sc-ah-m" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="12" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-muted)"/></marker><marker id="sc-ah-a" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-accent)"/></marker></defs>
 <g id="sc-head" data-step="0">
   <text x="40" y="46" font-size="25" class="h">Sunday 4 October: one conductor, three hours</text>
@@ -1558,11 +1708,11 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 
 <p>The pull-request flow was fast. We merged 107 pull requests in 48 hours, 99 of them before the game froze on Sunday, with a median of 15 minutes from open to merge for those 99. Speed only means something next to the quality signals, so here they are: the repo has 1,709 test functions across 63 test files, with 34 known failures listed rather than hidden. Review was a Claude steward session checking protected files and tests, with Codex on the riskier changes. Some pull requests were merged without a completed review, and the section on the mistake is about what that cost us.</p>
 
-<p>On the split of the work: Hector authored 63 of those pull requests, I authored 43, and one came from another account. He built the evals and more of the code. My part was the layer above the code: the conductor design, running my side's sessions through written hand-off briefings, and the strategy. On Friday I also built the first dealer bot and the team dashboard.</p>
+<p>Who did what is not the point: both of us took the decisions, and the split in the pull requests mostly reflects which Claude account was dealing with which problem.</p>
 
 <h3 id="how-a-session-hands-off">How a session hands off</h3>
 
-<p>Since July a hook rings a bell as context fills, and the session hands over. Tabs open only when I ask; three briefings ask in writing: "do not ride it".</p>
+<p>In my own Claude Code workspace there is a hook I wrote in July 2026: it rings a bell as the context fills, and the session hands over. Tabs open only when I ask; three briefings ask in writing: "do not ride it".</p>
 
 <figure class="cg" aria-label="The hand-off machinery, excerpted from the author's harness">
 <pre class="cg-pre"><code><span class="cg-file">compaction-bell.sh · one counter per session id</span><span class="cg-ln"><span class="cg-no">16</span><span class="cg-tx">COUNTER="/tmp/claude-compact-${SID}"</span></span><span class="cg-ln"><span class="cg-no">17</span><span class="cg-tx">N=0</span></span><span class="cg-ln"><span class="cg-no">18</span><span class="cg-tx">[ -f "$COUNTER" ] &amp;&amp; N=$(cat "$COUNTER" 2&gt;/dev/null)</span></span><span class="cg-ln"><span class="cg-no">19</span><span class="cg-tx">N=$(( ${N:-0} + 1 ))</span></span><span class="cg-ln"><span class="cg-no">20</span><span class="cg-tx">echo "$N" &gt; "$COUNTER"</span></span><span class="cg-gap"></span><span class="cg-file">compaction-bell.sh · its whole output: text for the model, then exit 0</span><span class="cg-ln"><span class="cg-no">25</span><span class="cg-tx">if [ "$N" -eq 1 ]; then</span></span><span class="cg-ln"><span class="cg-no">26</span><span class="cg-tx">  cat &lt;&lt;'EOF'</span></span><span class="cg-ln"><span class="cg-no">27</span><span class="cg-tx">&lt;system-reminder&gt;COMPACTION BELL (workspace token-economics rule A1): this</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  session just auto-compacted. Treat this as the wrap-up signal: finish ONLY the</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  step currently in progress, then run the wrapup skill and tell the user to</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  continue in a fresh session. Do not start new workstream items in this</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  session. [...]&lt;/system-reminder&gt;</span></span><span class="cg-ln"><span class="cg-no">28</span><span class="cg-tx">EOF</span></span><span class="cg-ln"><span class="cg-no">29</span><span class="cg-tx">else</span></span><span class="cg-ln"><span class="cg-no">30</span><span class="cg-tx">  cat &lt;&lt;EOF</span></span><span class="cg-ln"><span class="cg-no">31</span><span class="cg-tx">&lt;system-reminder&gt;COMPACTION BELL - HARD STOP (compaction #${N} this session):</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  the token-economics rule A1 bans riding a conductor session through 2+</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  compaction cycles. Stop new work NOW. Run the wrapup skill immediately and</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  hand off to a fresh session. This is a standing owner rule, not a suggestion</span></span><span class="cg-ln cg-cont"><span class="cg-no"></span><span class="cg-tx">  [...].&lt;/system-reminder&gt;</span></span><span class="cg-ln"><span class="cg-no">32</span><span class="cg-tx">EOF</span></span><span class="cg-ln"><span class="cg-no">33</span><span class="cg-tx">fi</span></span><span class="cg-ln"><span class="cg-no">34</span><span class="cg-tx">exit 0</span></span><span class="cg-gap"></span><span class="cg-file">kickoff-session.sh · a visible tab; the briefing is the first prompt</span><span class="cg-ln"><span class="cg-no">68</span><span class="cg-tx">TAB_ID=$(zellij action new-tab --cwd "$PROJECT_DIR" --name "$TAB_NAME" -- \</span></span><span class="cg-ln"><span class="cg-no">69</span><span class="cg-tx">  /usr/bin/env "KICKOFF_TAB=$TAB_NAME" \</span></span><span class="cg-ln"><span class="cg-no">70</span><span class="cg-tx">  "$CLAUDE_BIN" --permission-mode bypassPermissions --name "$TAB_NAME" \</span></span><span class="cg-ln"><span class="cg-no">71</span><span class="cg-tx">  --settings '{"crossSessionInbound":"accept"}' "$@" "$(cat "$PROMPT_FILE")")</span></span><span class="cg-gap"></span><span class="cg-file">kickoff-session.sh · the sidecar: the tab's id, for the status marks</span><span class="cg-ln"><span class="cg-no">77</span><span class="cg-tx">mkdir -p "$HOME/.claude/kickoff-tabs"</span></span><span class="cg-ln"><span class="cg-no">78</span><span class="cg-tx">printf '%s\n' "$TAB_ID" &gt; "$HOME/.claude/kickoff-tabs/$TAB_NAME.id"</span></span></code></pre>
@@ -1570,7 +1720,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 </figure>
 
 <figure class="fig fig-diagram" data-fig="handoff-loop" data-step-ms="360" role="group" aria-label="Diagram: how a session hands off">
-<div class="pan"><svg id="hl-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="100%" role="img" aria-labelledby="hl-title hl-desc" font-family="Inter, sans-serif" fill="#333330">
+<div class="pan"><svg class="fig-desk" id="hl-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="100%" role="img" aria-labelledby="hl-title hl-desc" font-family="Inter, sans-serif" fill="#333330">
 <title id="hl-title">How a session hands off</title>
 <desc id="hl-desc">Main path, clockwise from the top left. Claude Code's own part, in grey: the context nears full, auto-compaction keeps the same session id, and the SessionStart hooks rerun with source compact, their output going into the context. My harness, in white with a gold strip: compaction-bell.sh keeps one counter per session id and prints text, a wrap-up bell at the first compaction and a hard stop from the second on, then exits. That text lands in the model's context. The model decides, in the dashed gold box: finish the step, wrap up, and hand off only when allowed, either by a written authorization (the bell's text, a briefing rule 'do not ride it', or a goal I set) or because I ask in one line, as in 4 of the 5 weekend hand-offs. If it goes ahead, the wrapup skill updates notes and commits; a briefing file in ~/.claude/handoffs/ is written for a reader with zero prior context (read first, state, done-gates, rules); kickoff-session.sh checks zellij, the folder, the briefing, the ledger and that claude answers within 15 seconds, then opens a new zellij tab running claude with --permission-mode bypassPermissions and --name, the briefing as its first prompt; a sidecar file keeps the tab id. The new session gets a fresh context window and loads CLAUDE.md and memory (Claude Code), gets the workspace index from a hook, and its tab shows working or waiting (my harness). It has its own counter, so its first compaction rings bell #1 again. Side paths: the old session stays open until someone closes it; a timer started the Saturday 08:59 session while I slept; kickoff-remote.sh runs the same script on the Mac Mini (2 sessions that weekend). Saturday 3 October, the one hand-off with no prompt from me: 21:23:28 compaction, first bell; 21:42 briefing written; 21:42:03 new tab opened.</desc>
 <defs><marker id="hl-ah-w" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="14" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#4a4a45"></path></marker><marker id="hl-ah-d" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#8a8a82"></path></marker><filter id="hl-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#141414" flood-opacity="0.15"/></filter></defs>
@@ -1756,6 +1906,204 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
   <text x="28" y="1262.0" font-size="24" fill="#55554f" style="fill:#55554f">Grey is Claude Code's own behaviour, the gold-strip boxes are my harness, and</text>
   <text x="28" y="1295.5" font-size="24" fill="#55554f" style="fill:#55554f">the dashed box is the model's decision, the only place a hand-off is chosen.</text>
 </g>
+</svg><svg class="fig-phone" id="hlp-handoff-loop-phone" xmlns="http://www.w3.org/2000/svg" data-variant="phone" viewBox="0 0 640 3362" width="100%" role="img" aria-labelledby="hlp-title hlp-desc">
+<title id="hlp-title">How a session hands off</title>
+<desc id="hlp-desc">Main path, clockwise from the top left. Claude Code's own part, in grey: the context nears full, auto-compaction keeps the same session id, and the SessionStart hooks rerun with source compact, their output going into the context. My harness, in white with a gold strip: compaction-bell.sh keeps one counter per session id and prints text, a wrap-up bell at the first compaction and a hard stop from the second on, then exits. That text lands in the model's context. The model decides, in the dashed gold box: finish the step, wrap up, and hand off only when allowed, either by a written authorization (the bell's text, a briefing rule 'do not ride it', or a goal I set) or because I ask in one line, as in 4 of the 5 weekend hand-offs. If it goes ahead, the wrapup skill updates notes and commits; a briefing file in ~/.claude/handoffs/ is written for a reader with zero prior context (read first, state, done-gates, rules); kickoff-session.sh checks zellij, the folder, the briefing, the ledger and that claude answers within 15 seconds, then opens a new zellij tab running claude with --permission-mode bypassPermissions and --name, the briefing as its first prompt; a sidecar file keeps the tab id. The new session gets a fresh context window and loads CLAUDE.md and memory (Claude Code), gets the workspace index from a hook, and its tab shows working or waiting (my harness). It has its own counter, so its first compaction rings bell #1 again. Side paths: the old session stays open until someone closes it; a timer started the Saturday 08:59 session while I slept; kickoff-remote.sh runs the same script on the Mac Mini (2 sessions that weekend). Saturday 3 October, the one hand-off with no prompt from me: 21:23:28 compaction, first bell; 21:42 briefing written; 21:42:03 new tab opened.</desc>
+<defs><marker id="hlp-ah-w" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="14" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-body)"/></marker><marker id="hlp-ah-m" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="15" markerHeight="13" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-head)"/></marker><marker id="hlp-ah-d" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-muted)"/></marker></defs>
+<g id="hlp-title-text" data-step="0">
+  <text x="28" y="56" font-size="34" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600" letter-spacing="-0.3">How a session hands off</text>
+</g>
+<g id="hlp-legend" data-step="0">
+  <rect x="28" y="80" width="33" height="25" rx="5" style="fill:var(--f-alt);stroke:var(--f-muted)" stroke-width="1.5"/>
+  <text x="72" y="100" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">Claude Code</text>
+  <rect x="300" y="80" width="33" height="25" rx="5" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1"/><path d="M305,80 A5,5 0 0 0 300,85 L300,100 A5,5 0 0 0 305,105 Z" style="fill:var(--f-gold)"/>
+  <text x="344" y="100" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">my harness</text>
+  <rect x="28" y="116" width="33" height="25" rx="5" style="fill:var(--f-gold);stroke:var(--f-head)" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="72" y="136" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">the model's decision</text>
+  <path d="M300,129 L333,129" fill="none" style="stroke:var(--f-muted)" stroke-width="2.4" stroke-dasharray="8 7"/>
+  <text x="344" y="136" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">side path</text>
+</g>
+<g id="hlp-box-n1" data-step="1">
+  <rect x="72" y="258" width="544" height="142" rx="10" style="fill:var(--f-alt);stroke:var(--f-muted)" stroke-width="1.5"/>
+  <text x="90" y="310" font-size="26" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">Context nears full</text>
+  <text x="90" y="349" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">auto-compaction,</text>
+  <text x="90" y="382" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">same session id</text>
+</g>
+<g id="hlp-arrow-a1" data-step="2">
+  <path id="hlp-path-a1" d="M344,402 L344,436" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-box-n2" data-step="3">
+  <rect x="72" y="444" width="544" height="175" rx="10" style="fill:var(--f-alt);stroke:var(--f-muted)" stroke-width="1.5"/>
+  <text x="90" y="496" font-size="26" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">SessionStart hooks</text>
+  <text x="90" y="535" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">rerun with source</text>
+  <text x="90" y="568" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-head)">compact</tspan>; their output</text>
+  <text x="90" y="601" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">goes into the context</text>
+</g>
+<g id="hlp-arrow-a2" data-step="4">
+  <path id="hlp-path-a2" d="M344,621 L344,655" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-box-n3" data-step="5">
+  <rect x="72" y="663" width="544" height="232" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <path d="M78,663.8 A10,10 0 0 0 72,673 L72,885 A10,10 0 0 0 78,894.2 Z" style="fill:var(--f-gold)"/>
+  <text x="98" y="703" font-size="23" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-head)">compaction-bell.sh</tspan></text>
+  <text x="98" y="737" font-size="23" fill="var(--f-body)" style="fill:var(--f-body)">one counter per session id</text>
+  <rect x="98" y="757" width="194" height="40" rx="20" style="fill:var(--f-bg);stroke:var(--f-border)" stroke-width="1"/>
+  <text x="114" y="784" font-size="22" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">#1</tspan> wrap-up bell</text>
+  <rect x="98" y="807" width="295" height="40" rx="20" style="fill:var(--f-bg);stroke:var(--f-border)" stroke-width="1"/>
+  <text x="114" y="834" font-size="22" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">#2 and later</tspan> <tspan font-weight="600" style="fill:var(--f-accent)">HARD STOP</tspan></text>
+  <text x="98" y="875" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">prints text, exits 0</text>
+</g>
+<g id="hlp-arrow-a3" data-step="6">
+  <text x="360.0" y="927" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">text in the</text>
+  <text x="360.0" y="953" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">model's context</text>
+</g>
+<g id="hlp-box-input-rule" data-step="7">
+  <rect x="72" y="971" width="300" height="200" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <path d="M78,971.8 A10,10 0 0 0 72,981 L72,1159 A10,10 0 0 0 78,1168.2 Z" style="fill:var(--f-gold)"/>
+  <text x="98" y="1019" font-size="23" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">Written authorization</text>
+  <text x="98" y="1057" font-size="23" fill="var(--f-body)" style="fill:var(--f-body)">the bell's text · a</text>
+  <text x="98" y="1087" font-size="23" fill="var(--f-body)" style="fill:var(--f-body)">briefing</text>
+  <text x="98" y="1119" font-size="23" fill="var(--f-body)" style="fill:var(--f-body)">rule ('do not ride it') ·</text>
+  <text x="98" y="1151" font-size="23" fill="var(--f-body)" style="fill:var(--f-body)">a goal I set</text>
+</g>
+<g id="hlp-box-input-ask" data-step="7">
+  <rect x="396" y="971" width="220" height="200" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <circle cx="424" cy="1005" r="6.5" style="fill:var(--f-muted)"/>
+  <path d="M414,1029 C414,1015 434,1015 434,1029 Z" style="fill:var(--f-muted)"/>
+  <text x="414" y="1054" font-size="24" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">Or I ask in one</text>
+  <text x="414" y="1085" font-size="24" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">line</text>
+  <text x="414" y="1123" font-size="23" fill="var(--f-body)" style="fill:var(--f-body)">4 of 5 weekend</text>
+  <text x="414" y="1153" font-size="23" fill="var(--f-body)" style="fill:var(--f-body)">hand-offs</text>
+</g>
+<g id="hlp-arrow-in-rule" data-step="8">
+  <path id="hlp-path-in-rule" d="M222,1173 L222,1207" fill="none" style="stroke:var(--f-muted)" stroke-width="2.2" stroke-linecap="round" marker-end="url(#hlp-ah-d)"/>
+</g>
+<g id="hlp-arrow-in-ask" data-step="8">
+  <path id="hlp-path-in-ask" d="M506,1173 L506,1207" fill="none" style="stroke:var(--f-muted)" stroke-width="2.2" stroke-linecap="round" marker-end="url(#hlp-ah-d)"/>
+</g>
+<g id="hlp-arrow-a3-line" data-step="6">
+  <path id="hlp-path-a3" d="M344,897 L344,1207" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-box-n4" data-step="9">
+  <rect x="72" y="1215" width="544" height="236" rx="11" style="fill:var(--f-gold);stroke:var(--f-head)" stroke-width="2" stroke-dasharray="10 7"/>
+  <text x="344.0" y="1273" font-size="32" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="600" letter-spacing="2.4">THE MODEL</text>
+  <text x="344.0" y="1313" font-size="32" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="600" letter-spacing="2.4">DECIDES</text>
+  <text x="344.0" y="1361" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="500">finish the step, wrap up,</text>
+  <text x="344.0" y="1393" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="500">hand off only when</text>
+  <text x="344.0" y="1425" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="500">allowed</text>
+</g>
+<g id="hlp-arrow-a4" data-step="11">
+  <path id="hlp-path-a4" d="M344,1453 L344,1575" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-side-old" data-step="10">
+  <path id="hlp-path-tail" d="M580,1453 L580,1525" fill="none" style="stroke:var(--f-muted)" stroke-width="2.4" stroke-dasharray="8 7"/>
+  <text x="564" y="1481" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">old session:</text>
+  <text x="564" y="1507" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">stays open</text>
+  <text x="564" y="1533" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">until someone</text>
+  <text x="564" y="1559" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">closes it</text>
+</g>
+<g id="hlp-box-n5" data-step="12">
+  <rect x="72" y="1583" width="544" height="109" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <path d="M78,1583.8 A10,10 0 0 0 72,1593 L72,1682 A10,10 0 0 0 78,1691.2 Z" style="fill:var(--f-gold)"/>
+  <text x="98" y="1635" font-size="26" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">wrapup skill</text>
+  <text x="98" y="1674" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">notes updated, commit</text>
+</g>
+<g id="hlp-arrow-a5" data-step="13">
+  <path id="hlp-path-a5" d="M344,1694 L344,1728" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-box-n6" data-step="14">
+  <path class="card" d="M82,1736 L588,1736 L616,1764 L616,1988 A10,10 0 0 1 606,1998 L82,1998 A10,10 0 0 1 72,1988 L72,1746 A10,10 0 0 1 82,1736 Z" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <path d="M78,1736.8 A10,10 0 0 0 72,1746 L72,1988 A10,10 0 0 0 78,1997.2 Z" style="fill:var(--f-gold)"/>
+  <path d="M588,1736 L588,1764 L616,1764 Z" style="fill:var(--f-alt);stroke:var(--f-border)" stroke-width="1" stroke-linejoin="round"/>
+  <text x="98" y="1778" font-size="26" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">briefing file</text>
+  <text x="98" y="1814" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-head)">~/.claude/handoffs/</tspan></text>
+  <text x="98" y="1844" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-head)">&lt;date&gt;_&lt;slug&gt;.md</tspan></text>
+  <line x1="98" y1="1864" x2="598" y2="1864" style="stroke:var(--f-border)" stroke-width="1"/>
+  <text x="98" y="1898" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">zero prior context</text>
+  <text x="98" y="1930" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">read first · state</text>
+  <text x="98" y="1962" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">done-gates · rules</text>
+</g>
+<g id="hlp-arrow-a6" data-step="15">
+  <path id="hlp-path-a6" d="M344,2000 L344,2120" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-side-paths" data-step="15">
+  <text x="72" y="2042" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">timer: Sat 08:59,</text>
+  <text x="72" y="2068" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">while I slept</text>
+  <path id="hlp-path-timer" d="M132,2082 L132,2120" fill="none" style="stroke:var(--f-muted)" stroke-width="2.4" stroke-dasharray="8 7" marker-end="url(#hlp-ah-d)"/>
+  <text x="600" y="2042" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="600"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-head)">kickoff-remote.sh:</tspan></text>
+  <text x="600" y="2068" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">same script on the</text>
+  <text x="600" y="2094" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="end" font-weight="500">Mac Mini (2 sessions)</text>
+  <path id="hlp-path-remote" d="M556,2106 L556,2120" fill="none" style="stroke:var(--f-muted)" stroke-width="2.4" stroke-dasharray="8 7" marker-end="url(#hlp-ah-d)"/>
+</g>
+<g id="hlp-box-n7" data-step="16">
+  <rect x="72" y="2128" width="544" height="204" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <path d="M78,2128.8 A10,10 0 0 0 72,2138 L72,2322 A10,10 0 0 0 78,2331.2 Z" style="fill:var(--f-gold)"/>
+  <text x="98" y="2176" font-size="23" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-head)">kickoff-session.sh</tspan></text>
+  <text x="98" y="2215" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">in zellij? folder?</text>
+  <text x="98" y="2248" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">briefing not empty?</text>
+  <text x="98" y="2281" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">not done in ledger?</text>
+  <text x="98" y="2314" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">claude answers in 15 s?</text>
+</g>
+<g id="hlp-arrow-a7" data-step="17">
+  <path id="hlp-path-a7" d="M344,2334 L344,2420" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-sidecar" data-step="18">
+  <rect x="389" y="2350" width="227" height="40" rx="20" style="fill:var(--f-bg);stroke:var(--f-border)" stroke-width="1"/>
+  <text x="404.8565625" y="2377" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">sidecar: <tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-head)">&lt;tab&gt;.id</tspan></text>
+  <path d="M502,2392 L502,2426" fill="none" style="stroke:var(--f-muted)" stroke-width="2" stroke-dasharray="0.1 6" stroke-linecap="round"/>
+</g>
+<g id="hlp-box-n8" data-step="19">
+  <rect x="72" y="2428" width="544" height="246" rx="10" style="fill:var(--f-head);stroke:var(--f-head)" stroke-width="1"/>
+  <path d="M72,2462 L72,2438 A10,10 0 0 1 82,2428 L606,2428 A10,10 0 0 1 616,2438 L616,2462 Z" style="fill:var(--f-body)"/>
+  <path d="M78,2428.8 A10,10 0 0 0 72,2438 L72,2664 A10,10 0 0 0 78,2673.2 Z" style="fill:var(--f-gold)"/>
+  <circle cx="98" cy="2445" r="5" style="fill:var(--f-muted)"/>
+  <circle cx="116" cy="2445" r="5" style="fill:var(--f-muted)"/>
+  <circle cx="134" cy="2445" r="5" style="fill:var(--f-muted)"/>
+  <text x="98" y="2498" font-size="24" fill="var(--f-bg)" style="fill:var(--f-bg)" font-weight="600">new zellij tab</text>
+  <text x="98" y="2532" font-size="24" fill="var(--f-bg)" style="fill:var(--f-bg)" font-weight="600"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-bg)">claude</tspan></text>
+  <text x="124" y="2564" font-size="24" fill="var(--f-border)" style="fill:var(--f-border)"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-border)">--permission-mode</tspan></text>
+  <text x="124" y="2594" font-size="24" fill="var(--f-border)" style="fill:var(--f-border)"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-border)">bypassPermissions</tspan></text>
+  <text x="124" y="2624" font-size="24" fill="var(--f-border)" style="fill:var(--f-border)"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-border)">--name &lt;tab&gt;</tspan></text>
+  <text x="124" y="2654" font-size="24" fill="var(--f-border)" style="fill:var(--f-border)"><tspan font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" style="fill:var(--f-border)">"&lt;briefing&gt;"</tspan></text>
+</g>
+<g id="hlp-arrow-a8" data-step="20">
+  <path id="hlp-path-a8" d="M344,2676 L344,2710" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+</g>
+<g id="hlp-box-n9" data-step="21">
+  <rect x="72" y="2718" width="544" height="260" rx="10" style="fill:var(--f-card);stroke:var(--f-body)" stroke-width="2"/>
+  <path d="M72,2848 L72,2728 A10,10 0 0 1 82,2718 L606,2718 A10,10 0 0 1 616,2728 L616,2848 Z" style="fill:var(--f-alt)"/>
+  <path d="M78,2848 L78,2970 A8,8 0 0 1 73,2974 L73,2848 Z" style="fill:var(--f-gold)"/>
+  <line x1="73" y1="2848" x2="615" y2="2848" style="stroke:var(--f-muted)" stroke-width="1.5"/>
+  <rect x="73" y="2719" width="542" height="258" rx="9" style="fill:none;stroke:var(--f-body)" stroke-width="2"/>
+  <text x="90" y="2760" font-size="26" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">New session</text>
+  <text x="90" y="2798" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">fresh context window</text>
+  <text x="90" y="2830" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">CLAUDE.md and memory</text>
+  <text x="98" y="2888" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">first prompt = briefing</text>
+  <text x="98" y="2920" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">workspace index added</text>
+  <text x="98" y="2952" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">tab: working / waiting</text>
+</g>
+<g id="hlp-arrow-loop" data-step="22">
+  <path id="hlp-path-loop" d="M70,2848 L44,2848 L44,232 L344,232 L344,250" fill="none" style="stroke:var(--f-body)" stroke-width="2.4" stroke-linecap="round" marker-end="url(#hlp-ah-w)"/>
+  <text x="56" y="186" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">the new session has its own counter:</text>
+  <text x="56" y="214" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">its first compaction rings bell #1 again</text>
+</g>
+<g id="hlp-annotation" data-step="23">
+  <line x1="28" y1="3026" x2="616" y2="3026" style="stroke:var(--f-border)" stroke-width="1"/>
+  <text x="28" y="3064" font-size="22" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">Saturday 3 October, the one hand-off with</text>
+  <text x="28" y="3092" font-size="22" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">no prompt from me:</text>
+  <circle cx="34" cy="3120" r="6" style="fill:var(--f-gold);stroke:var(--f-goldd)" stroke-width="1.5"/>
+  <text x="50" y="3128" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)"><tspan font-weight="600" style="fill:var(--f-head)">21:23:28</tspan> compaction, first bell</text>
+  <circle cx="34" cy="3150" r="6" style="fill:var(--f-gold);stroke:var(--f-goldd)" stroke-width="1.5"/>
+  <text x="50" y="3158" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)"><tspan font-weight="600" style="fill:var(--f-head)">21:42</tspan> briefing written</text>
+  <circle cx="34" cy="3180" r="6" style="fill:var(--f-gold);stroke:var(--f-goldd)" stroke-width="1.5"/>
+  <text x="50" y="3188" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)"><tspan font-weight="600" style="fill:var(--f-head)">21:42:03</tspan> new tab opened</text>
+</g>
+<g id="hlp-caption" data-step="24">
+  <text x="28" y="3242" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">Grey is Claude Code's own behaviour, the</text>
+  <text x="28" y="3272" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">gold-strip boxes are my harness, and</text>
+  <text x="28" y="3302" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">the dashed box is the model's decision, the</text>
+  <text x="28" y="3332" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">only place a hand-off is chosen.</text>
+</g>
 </svg></div>
 </figure>
 
@@ -1780,12 +2128,10 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 </div>
 </details>
 
-<p>During the event 26 sessions ran on my laptop: 14 on a briefing, 12 on a prompt I gave; bell to tab took 7 to 21 minutes (my private logs). Both Sunday hand-offs came at a second compaction because I asked. On 8 October this page's review session handed off unprompted. What crosses is a 5 to 12 KB file. Writing this, I fixed a <code>/tmp</code> symlink bug in the bell's cleanup. The harness holds the rule; the model decides.</p>
-
 <h2 id="the-improvement-loop">The improvement loop</h2>
 
 <figure class="fig fig-diagram" data-fig="diagram-3" role="group" aria-label="Diagram: the improvement loop">
-<div class="pan"><svg id="d3-diagram-improvement-loop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="100%" role="img" aria-labelledby="d3-title d3-desc" font-family="Inter, sans-serif" fill="#333330">
+<div class="pan"><svg class="fig-desk" id="d3-diagram-improvement-loop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="100%" role="img" aria-labelledby="d3-title d3-desc" font-family="Inter, sans-serif" fill="#333330">
 <title id="d3-title">How a change earned its way into the live bots</title>
 <desc id="d3-desc">The rule came first, and the rule was allowed to say no.</desc>
 <defs><marker id="d3-ah-w" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" fill="#4a4a45"></path></marker><filter id="d3-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#141414" flood-opacity="0.15"/></filter></defs>
@@ -1953,20 +2299,125 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
     <tspan x="554" y="911">no</tspan>
   </text>
 </g>
+</svg><svg class="fig-phone" id="d3p-diagram-improvement-loop-phone" xmlns="http://www.w3.org/2000/svg" data-variant="phone" viewBox="0 0 640 2094" width="100%" role="img" aria-labelledby="d3p-title d3p-desc">
+<title id="d3p-title">How a change earned its way into the live bots</title>
+<desc id="d3p-desc">The rule came first, and the rule was allowed to say no.</desc>
+<defs><marker id="d3p-ah-w" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="14" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-body)"/></marker><marker id="d3p-ah-m" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="15" markerHeight="13" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-head)"/></marker><marker id="d3p-ah-d" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="13" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L12,5 L0,10 z" style="fill:var(--f-muted)"/></marker></defs>
+<g id="d3p-g-title" data-step="0">
+  <text x="28" y="46" font-size="32" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">How a change earned its way into the</text>
+  <text x="28" y="84" font-size="32" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">live bots</text>
+</g>
+<g id="d3p-label-offline-evals" data-step="1">
+  <text x="28" y="124" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">Offline evals: no network, no key, no model</text>
+</g>
+<g id="d3p-box-live-bots" data-step="2">
+  <rect x="88" y="206" width="528" height="62" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="106" y="246" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Live bots log every event (JSONL)</text>
+</g>
+<g id="d3p-arrow-live-bots-logs-branch" data-step="3">
+  <path id="d3p-path-live-bots-logs-branch" d="M352,270 L352,304" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-box-logs-branch" data-step="4">
+  <rect x="88" y="312" width="528" height="62" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="106" y="352" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Logs branch, mirrored every 10 minutes</text>
+</g>
+<g id="d3p-arrow-logs-branch-cases" data-step="5">
+  <path id="d3p-path-logs-branch-cases" d="M352,376 L352,410" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-box-cases" data-step="6">
+  <rect x="88" y="418" width="528" height="94" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="106" y="458" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Cases extracted per flow (game text never</text>
+  <text x="106" y="490" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">enters a trace)</text>
+</g>
+<g id="d3p-arrow-cases-acceptance-rule" data-step="7">
+  <path id="d3p-path-cases-acceptance-rule" d="M352,514 L352,548" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-box-acceptance-rule" data-step="8">
+  <rect x="88" y="556" width="528" height="62" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="106" y="596" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Acceptance rule written BEFORE the run</text>
+</g>
+<g id="d3p-arrow-acceptance-rule-candidates" data-step="9">
+  <path id="d3p-path-acceptance-rule-candidates" d="M352,620 L352,654" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-box-candidates" data-step="10">
+  <rect x="88" y="662" width="528" height="126" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="106" y="702" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Candidates:</tspan> hill climb, sweep, random.</text>
+  <text x="106" y="734" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">About 2,100 duel versions; 9,024 broker</text>
+  <text x="106" y="766" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">policies screened</text>
+</g>
+<g id="d3p-arrow-candidates-score" data-step="11">
+  <path id="d3p-path-candidates-score" d="M352,790 L352,824" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-box-score" data-step="12">
+  <rect x="88" y="832" width="528" height="126" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="106" y="872" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Score on train seeds, pick on select seeds,</text>
+  <text x="106" y="904" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">confirm on held-out seeds (200 / 600 /</text>
+  <text x="106" y="936" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">2,000 sessions)</text>
+</g>
+<g id="d3p-arrow-score-hero" data-step="13">
+  <path id="d3p-path-score-hero" d="M352,960 L352,994" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-hero" data-step="14">
+  <rect x="88" y="1002" width="528" height="336" rx="11" style="fill:var(--f-gold);stroke:var(--f-head)" stroke-width="3"/>
+  <text x="352.0" y="1056" font-size="30" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="600" letter-spacing="2.4">THE GATE</text>
+  <polygon points="118,1088 124.4,1094.4 118,1100.8 111.6,1094.4" style="fill:var(--f-ink)"/>
+  <text x="138" y="1102" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)">better than the baseline by more than 2</text>
+  <text x="138" y="1132" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)">standard errors (paired)</text>
+  <polygon points="118,1160 124.4,1166.4 118,1172.8 111.6,1166.4" style="fill:var(--f-ink)"/>
+  <text x="138" y="1174" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)">not more than 2 standard errors worse</text>
+  <text x="138" y="1204" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)">against any type of opponent</text>
+  <polygon points="118,1232 124.4,1238.4 118,1244.8 111.6,1238.4" style="fill:var(--f-ink)"/>
+  <text x="138" y="1246" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)">holds up in a last-tick stress test</text>
+  <polygon points="118,1274 124.4,1280.4 118,1286.8 111.6,1280.4" style="fill:var(--f-ink)"/>
+  <text x="138" y="1288" font-size="24" fill="var(--f-ink)" style="fill:var(--f-ink)">self-test passes</text>
+</g>
+<g id="d3p-arrow-hero-ship" data-step="15">
+  <path id="d3p-path-hero-ship" d="M264,1341 L264,1390" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-label-yes" data-step="15">
+  <text x="278.0" y="1376" font-size="20" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">yes</text>
+</g>
+<g id="d3p-box-ship" data-step="16">
+  <rect x="88" y="1398" width="352" height="158" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="106" y="1438" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">Ship:</tspan> a parameters file via</text>
+  <text x="106" y="1470" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">PR, a human merges, the</text>
+  <text x="106" y="1502" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">Mini pulls, one bot restarts</text>
+  <text x="106" y="1534" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">in its allowed window</text>
+</g>
+<g id="d3p-arrow-hero-stop" data-step="18">
+  <path id="d3p-path-hero-stop" d="M454,1341 L454,1588" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-label-no" data-step="18">
+  <text x="468.0" y="1376" font-size="20" fill="var(--f-accent)" style="fill:var(--f-accent)" font-weight="600">no</text>
+</g>
+<g id="d3p-box-stop" data-step="19">
+  <rect x="292" y="1596" width="324" height="62" rx="10" style="fill:var(--f-card);stroke:var(--f-accent)" stroke-width="1.5"/>
+  <text x="310" y="1636" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-accent)">Stop:</tspan> keep the baseline</text>
+</g>
+<g id="d3p-arrow-ship-live-bots" data-step="17">
+  <path id="d3p-path-ship-live-bots" d="M86,1477 L56,1477 L56,176 L352,176 L352,198" fill="none" style="stroke:var(--f-body)" stroke-width="2.6" stroke-linecap="round" marker-end="url(#d3p-ah-w)"/>
+</g>
+<g id="d3p-label-back" data-step="17">
+  <text x="68" y="166" font-size="20" fill="var(--f-muted)" style="fill:var(--f-muted)" font-weight="500">back into the live loop</text>
+</g>
+<g id="d3p-box-record" data-step="20">
+  <rect x="24" y="1714" width="592" height="300" rx="13" style="fill:var(--f-alt);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="42" y="1748" font-size="22" fill="var(--f-head)" style="fill:var(--f-head)" font-weight="600">Weekend record</text>
+  <rect x="40" y="1766" width="560" height="126" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="1806" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">1 change shipped:</tspan> from the lab simulations,</text>
+  <text x="58" y="1838" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">not the searches; one feature switched off in</text>
+  <text x="58" y="1870" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">review</text>
+  <rect x="40" y="1904" width="560" height="94" rx="10" style="fill:var(--f-card);stroke:var(--f-border)" stroke-width="1.5"/>
+  <text x="58" y="1944" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)"><tspan font-weight="600" style="fill:var(--f-head)">2 stopped:</tspan> both overnight search winners</text>
+  <text x="58" y="1976" font-size="24" fill="var(--f-body)" style="fill:var(--f-body)">failed the gate</text>
+</g>
+<g id="d3p-caption" data-step="21">
+  <text x="28" y="2064" font-size="22" fill="var(--f-muted)" style="fill:var(--f-muted)">The rule came first, and the rule was allowed to say no.</text>
+</g>
 </svg></div>
 </figure>
 
-<p>Hector built offline evals for all four bot families. They replay recorded cases with no network, no key and no model. Around them sat lab simulators and two overnight searches, all feeding the same cycle:</p>
-
-<ol>
-<li>The live bots log every event.</li>
-<li>Cases are extracted per flow. Game chat never enters a trace.</li>
-<li>The acceptance rule is written before the run.</li>
-<li>Candidates are generated: hill climbing, sweeps, random variants. Overnight that meant about 2,100 duel versions and 9,024 broker policies screened.</li>
-<li>Candidates are scored on training seeds, picked on selection seeds, and confirmed on held-out seeds nobody had tuned against.</li>
-<li>The gate. For the duel search, a candidate had to beat the current version by more than 2 standard errors on the same held-out sessions, not be more than 2 standard errors worse against any type of opponent, hold up in a last-tick stress test, and pass the bot's own self-test.</li>
-<li>Ship it as a settings file through a pull request (a human merges, the Mac Mini pulls, one bot restarts in its allowed window), or stop and keep what's running.</li>
-</ol>
+<p>We built offline evals for all four bot families through Claude Code's claude-api skill: recorded cases replayed with no network, no key and no model. The two overnight searches scored candidates on training seeds, picked on selection seeds and confirmed on held-out seeds nobody had tuned against. The same skill drove the hill climb, about 2,100 duel versions and 9,024 broker policies screened, and a rule written before each run decided what shipped: for the duel search, better than the baseline by more than 2 standard errors on the same held-out sessions, and not more than 2 standard errors worse against any type of opponent.</p>
 
 <figure class="fig" data-fig="funnel" data-step-ms="520">
 <div class="fig-grid">
@@ -2039,13 +2490,11 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 </script>
 </figure>
 
-<p>The record from the weekend: one change shipped and two were stopped. Both overnight search winners looked better than what we were running, and neither cleared the rule written before its search started, so neither went live. Every eval family ended with "keep the baseline". The one change that did ship came from the lab simulations, not from the searches, and a reviewer switched off one of its features before it went live, so what shipped was small.</p>
-
-<p>That sounds like a thin result. I think it's the most useful thing we built. An eval that's allowed to say no is the kind people trust, and ours said no twice to results that looked good at seven in the morning.</p>
+<p>The rule said no twice. Both overnight winners looked better than what was running at seven in the morning and neither cleared it, so neither went live. An eval that is allowed to say no is the kind people trust.</p>
 
 <p>Not every rule needed a search. Friday's practice duels didn't score, and our duel bot mostly watched them; in every finished duel where the rival had named a price, its last offer was already inside our limit. From Saturday the bot stayed quiet while the rival kept improving and then took any offer inside the limit near the deadline.</p>
 
-<p>The lesson I took is about cost, not possibility. The game was random even with deterministic bots: opponents changed and every session played out differently. That's why the gate compares two versions on the same held-out sessions and asks for more than 2 standard errors. A deterministic core makes that comparison cheap and repeatable. The same session gives the same decision, so the difference between two versions comes from the change, and replaying thousands of sessions overnight needs no model call. Put a model inside the decision loop and every replay costs tokens and time, and the model adds its own variation on top of the game's, so you need more sessions to see the same difference. That's harder and costlier, but not impossible.</p>
+<p>The lesson is about cost. The game was random even with deterministic bots, so the gate compares two versions on the same held-out sessions and asks for more than 2 standard errors. A deterministic core makes that cheap: the same session gives the same decision, and replaying thousands of sessions overnight needs no model call. Put a model inside the decision loop and every replay costs tokens and time, and the model's own variation sits on top of the game's. Possible, but harder and costlier.</p>
 
 <h2 id="the-weekend-replayed">The weekend, replayed</h2>
 
@@ -2157,12 +2606,12 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 
 <p>On Friday night I shut down the agent that had been merging pull requests overnight. By Saturday morning eight pull requests were waiting, and we had a scored test at 11:50. We merged all eight in ten minutes, between 09:23 and 09:33. One of them carried a broker defect. At 11:50 the broker matched nothing, and that test scored zero for us. The fix came from my side and was live at 12:05, fifteen minutes later.</p>
 
-<p>What changed afterwards: one merger session only, and for anything touching the bots or the launcher it waited for a Codex review of that exact commit, or an explicit "no Codex needed". It wasn't perfect. That afternoon one dealer-bot pull request merged before its final review and needed a follow-up. The lesson is plain: eight merges in ten minutes before a live test puts all the risk exactly where you can least afford it. A 15-minute median to merge is only safe with a gate that still holds when the clock is tight.</p>
+<p>What changed afterwards: one merger session only, and for anything touching the bots or the launcher it waited for a Codex review of that exact commit, or an explicit "no Codex needed". It wasn't perfect. That afternoon one dealer-bot pull request merged before its final review and needed a follow-up. The lesson is about the gate, and I had time for it. All eight were merged by 09:33 and the test was at 11:50: nearly two and a half hours between the first merge and the test, enough for a quarter of an hour on each of the eight, and a review would have fit. I had a standing rule in my own workspace, an adversarial review before any merge, and I skipped it anyway. Never skip that review before a merge, however tight the clock looks.</p>
 
 <h2 id="where-a-model-would-belong">Where a model would belong</h2>
 
 <figure class="fig" data-fig="model-sketch" data-step-ms="450">
-<p class="pan-hint" aria-hidden="true">swipe to pan</p><div class="fig-card"><div class="pan"><svg viewBox="0 0 1080 500" role="img" aria-label="Design sketch, not what ran. A counterparty message, which is untrusted text, goes into a model that reads it, proposes a structured offer and writes the reply. The proposal then goes to the same gate: plain code checks it against our limit, and the result is send or refuse. The model never touches the limit and never sends.">
+<div class="fig-card"><div class="pan"><svg class="fig-desk" viewBox="0 0 1080 500" role="img" aria-label="Design sketch, not what ran. A counterparty message, which is untrusted text, goes into a model that reads it, proposes a structured offer and writes the reply. The proposal then goes to the same gate: plain code checks it against our limit, and the result is send or refuse. The model never touches the limit and never sends.">
 <g data-step="0"><rect x="250" y="18" width="580" height="44" rx="22" fill="none" stroke="var(--f-muted)" stroke-width="2" stroke-dasharray="6 6"/>
 <text class="m" x="540" y="47" text-anchor="middle" font-size="20">Design sketch. The hackathon bots never called a model.</text></g>
 <g data-step="1"><rect class="box" x="20" y="185" width="210" height="130" rx="12"/><text x="125.0" y="230.0" text-anchor="middle" font-size="20">Counterparty</text><text x="125.0" y="256.0" text-anchor="middle" font-size="20">message</text><text x="125.0" y="282.0" text-anchor="middle" font-size="20">(untrusted text)</text></g>
@@ -2187,6 +2636,57 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <text class="m" x="751" y="388" text-anchor="middle" font-size="19">the limit and the accept live in code;</text>
 <text class="m" x="751" y="414" text-anchor="middle" font-size="19">the model only proposes</text></g>
 <g class="packets"></g>
+</svg><svg class="fig-phone" xmlns="http://www.w3.org/2000/svg" data-variant="phone" viewBox="0 0 640 956" width="100%" role="img" aria-label="Design sketch, not what ran. A counterparty message, which is untrusted text, goes into a model that reads it, proposes a structured offer and writes the reply. The proposal then goes to the same gate: plain code checks it against our limit, and the result is send or refuse. The model never touches the limit and never sends.">
+<g data-step="0">
+  <rect x="28" y="18" width="584" height="44" rx="22" fill="none" stroke="var(--f-muted)" stroke-width="2" stroke-dasharray="6 6"/>
+  <text x="320.0" y="47" font-size="20" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="middle">Design sketch. The hackathon bots never called a model.</text>
+</g>
+<g data-step="1">
+  <rect class="box" x="120.0" y="104" width="400" height="118" rx="12"/>
+  <text x="320.0" y="146" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle">Counterparty</text>
+  <text x="320.0" y="172" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle">message</text>
+  <text x="320.0" y="198" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle">(untrusted text)</text>
+</g>
+<path class="arrow" data-step="2" d="M320.0 226 L320.0 254"/>
+  <polygon class="head" data-step="2" points="0,-9 16,0 0,9" transform="translate(320.0 258) rotate(90)"/>
+<g data-step="3">
+  <rect class="box" x="120.0" y="272" width="400" height="150" rx="12"/>
+  <text x="320.0" y="314" font-size="20" fill="var(--f-head)" style="fill:var(--f-head)" text-anchor="middle" font-weight="600">Model</text>
+  <text x="320.0" y="340" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle">reads the text,</text>
+  <text x="320.0" y="366" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle">proposes a structured offer,</text>
+  <text x="320.0" y="392" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle">writes the reply</text>
+</g>
+<path class="arrow" data-step="4" d="M320.0 426 L320.0 554"/>
+  <polygon class="head" data-step="4" points="0,-9 16,0 0,9" transform="translate(320.0 558) rotate(90)"/>
+<path class="dotted" data-step="7" d="M150.0 426 L150.0 466"/>
+<g data-step="7">
+  <line x1="130.0" y1="472" x2="170.0" y2="472" stroke="var(--f-muted)" stroke-width="4" stroke-linecap="round"/>
+  <text x="150.0" y="506" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle" font-weight="500">never touches the limit,</text>
+  <text x="150.0" y="532" font-size="20" fill="var(--f-body)" style="fill:var(--f-body)" text-anchor="middle" font-weight="500">never sends</text>
+</g>
+<g data-step="5">
+  <rect class="box hero" x="120.0" y="572" width="400" height="150" rx="14"/>
+  <text x="320.0" y="616" font-size="20" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="600">The same gate:</text>
+  <text x="320.0" y="650" font-size="20" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="500">plain code checks</text>
+  <text x="320.0" y="676" font-size="20" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="500">the proposal against</text>
+  <text x="320.0" y="702" font-size="20" fill="var(--f-ink)" style="fill:var(--f-ink)" text-anchor="middle" font-weight="500">our limit</text>
+</g>
+<path class="arrow" data-step="6" d="M290.0 726 C 290.0 752, 220.0 746, 220.0 760"/>
+  <polygon class="head" data-step="6" points="0,-9 16,0 0,9" transform="translate(220.0 764) rotate(90)"/>
+<path class="arrow" data-step="6" d="M350.0 726 C 350.0 752, 420.0 746, 420.0 760"/>
+  <polygon class="head" data-step="6" points="0,-9 16,0 0,9" transform="translate(420.0 764) rotate(90)"/>
+<g data-step="6">
+  <rect class="box" x="160.0" y="778" width="120" height="70" rx="12" style="stroke:var(--f-ok);stroke-width:3"/>
+  <text x="220.0" y="821" font-size="22" fill="var(--f-ok)" style="fill:var(--f-ok)" text-anchor="middle" font-weight="600">send</text>
+</g>
+<g data-step="6">
+  <rect class="box" x="360.0" y="778" width="120" height="70" rx="12" style="stroke:var(--f-accent);stroke-width:3"/>
+  <text x="420.0" y="821" font-size="22" fill="var(--f-accent)" style="fill:var(--f-accent)" text-anchor="middle" font-weight="600">refuse</text>
+</g>
+<g data-step="7">
+  <text x="320.0" y="904" font-size="19" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="middle">the limit and the accept live in code;</text>
+  <text x="320.0" y="930" font-size="19" fill="var(--f-muted)" style="fill:var(--f-muted)" text-anchor="middle">the model only proposes</text>
+</g>
 </svg></div></div>
 <figcaption>A design sketch: the model proposes above the same gate; code still decides.</figcaption>
 <script>
@@ -2257,7 +2757,9 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 </script>
 </figure>
 
-<p>The honest limit of this project is that no model ran at run time, so the fair question is where the model would go. Above the gate, proposing. In the sketch, the counterparty's message, which is untrusted text, goes to a model that reads it, proposes a structured offer and writes the reply. The proposal then goes through the same gate the bots used: plain code checks it against our limit and decides. The model never touches the limit and never sends. That buys what a model is good at, reading messy text and writing a persuasive line, without giving it the wallet. It also keeps the improvement loop intact: the gate still replays deterministically, and the model layer gets its own evals, for how well it reads offers, separate from the decision. This is a design sketch, not what we ran.</p>
+<p>The honest limit of this project is that no model ran at run time, so the fair question is where the model would go. Above the gate, proposing. In the sketch, the counterparty's message, which is untrusted text, goes to a model that reads it, proposes a structured offer and writes the reply. The proposal then goes through the same gate the bots used: plain code checks it against our limit and decides. The model never touches the limit and never sends. That buys what a model is good at, reading messy text and writing a persuasive line, without giving it the wallet. It also keeps the improvement loop intact: the gate still replays deterministically, and the model layer gets its own evals, for how well it reads offers, separate from the decision.</p>
+
+<p>This is a design sketch, not what we ran, though it is close to the design we had discussed before the event: my playbook already had code deciding every number, with the model only reading and writing the text around a decision already made. On Friday we wanted to be different, and the research run we set going at the start came back with the push to go all the way: run the bots as plain Python and use the models to orchestrate them. That matched something I knew from decoding SMF records, the mainframe's accounting and performance records, where you cannot trust a language model with the math. Separate the math from the model, and the rest of the design follows.</p>
 
 <h2 id="what-this-split-means-in-a-regulated-estate">What this split means in a regulated estate</h2>
 
@@ -2265,7 +2767,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 
 <h2 id="the-people">The people</h2>
 
-<p>When the clock started on Friday evening, Hector and I set a long research run going and stepped outside to get to know each other while it ran. Back inside, we read what it had found and made our design calls. It isn't how I expected a hackathon to start, and I'd do it again. The game itself opened late that evening, at about 20:20 instead of 19:00, and our first deal went through before 21:00. Most of the room had gone deep on AI, and the people I got to talk to properly all said the fun part is finding your way around the obstacles. That's been my experience too.</p>
+<p>When the clock started on Friday evening, Hector and I set a long research run going and stepped outside to get to know each other while it ran. Back inside, we read what it had found. It isn't how I expected a hackathon to start, and I'd do it again. The game itself opened late that evening, at about 20:20 instead of 19:00, and our first deal went through before 21:00. Most of the room had gone deep on AI, and the people I got to talk to properly all said the fun part is finding your way around the obstacles. That's been my experience too.</p>
 
 <h2 id="what-i-d-keep">What I'd keep</h2>
 
@@ -2276,7 +2778,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <li><strong>Write the acceptance rule before the run.</strong> A result that looks good at seven in the morning can't argue its way in; the rule was there first. (The improvement loop.)</li>
 <li><strong>An eval is only worth having if it is allowed to say no.</strong> Ours said no twice, and that is the result I trust most. (The improvement loop.)</li>
 <li><strong>Sessions start from briefings, not conversations.</strong> Goal, authority, hard rules, plan, checkpoints; a fresh session carries on where the last one stopped. (The orchestration.)</li>
-<li><strong>One merger and one gate, even when the clock is tight.</strong> Eight merges in ten minutes before a scored test is where the risk concentrates. (The mistake.)</li>
+<li><strong>Never skip the adversarial review before a merge.</strong> We had nearly two and a half hours before the test and I skipped it anyway; the defect that scored zero at 11:50 rode in on one of the eight. (The mistake.)</li>
 </ol>
 
 <h2 id="for-agents-and-verifiers" class="appendix-h">For agents and verifiers</h2>
@@ -2312,13 +2814,16 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <div class="cl-card">
 <p class="cl-lead">Every number in this table traces to a public file or a GitHub query.</p>
 <details class="cl-details">
-<summary>Show the 101 claims</summary>
+<summary>Show the 111 claims</summary>
 <table>
 <thead><tr><th>Claim</th><th>Value</th><th>Source</th></tr></thead>
 <tbody>
 <tr><td data-label="Claim">First of 18 on the Negotiating column</td><td data-label="Value" class="num">26.04 of 30</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L118" target="_blank" rel="noopener">SUBMISSION.md:118</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L4" target="_blank" rel="noopener">SUBMISSION.md:4</a></td></tr>
 <tr><td data-label="Claim">Game leaderboard at the 15:00 freeze</td><td data-label="Value" class="num">34.19, 4th of 18</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L4" target="_blank" rel="noopener">SUBMISSION.md:4</a></td></tr>
 <tr><td data-label="Claim">The bots never call a model</td><td data-label="Value" class="num">No model in the trading loop</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L124" target="_blank" rel="noopener">SUBMISSION.md:124</a></td></tr>
+<tr><td data-label="Claim">Before the event, the author's playbook already had code deciding every number, with the model only reading and writing the text around a decision already made</td><td data-label="Value" class="num">author's statement</td><td data-label="Source">author's statement</td></tr>
+<tr><td data-label="Claim">The research run set going at the start on Friday came back with the push to run the bots as plain Python and use the models to orchestrate them</td><td data-label="Value" class="num">author's statement</td><td data-label="Source">author's statement</td></tr>
+<tr><td data-label="Claim">From decoding SMF records on the mainframe: a language model cannot be trusted with the math</td><td data-label="Value" class="num">author's statement</td><td data-label="Source">author's statement</td></tr>
 <tr><td data-label="Claim">Offer text is never parsed for terms</td><td data-label="Value" class="num">Only structured give / want is read</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L174" target="_blank" rel="noopener">SUBMISSION.md:174</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/duel.py#L3" target="_blank" rel="noopener">agent/duel.py:3</a></td></tr>
 <tr><td data-label="Claim">Chat lines live in code as constants</td><td data-label="Value" class="num">5 fixed sell lines, 5 buy lines</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/duel.py#L170" target="_blank" rel="noopener">agent/duel.py:170</a></td></tr>
 <tr><td data-label="Claim">Kit: prompt injection changes what dealers say, never their prices</td><td data-label="Value" class="num">Dealers' words and prices kept apart</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/kit/RULES.md#L133" target="_blank" rel="noopener">kit/RULES.md:133</a></td></tr>
@@ -2350,6 +2855,8 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <tr><td data-label="Claim">Documents written with Claude in the window</td><td data-label="Value" class="num">82 markdown files under docs/ added in the window; 84 files, 153,379 words at the close<span class="cl-note">The log lists 84 markdown paths added in the window; 2 judges drafts were renamed to v2 before the close, so 82 are still there under the name they were added with. The 84 files at the close are those 82 plus the 2 renamed drafts. Words are whitespace-split.</span></td><td data-label="Source"><code>git log ac7ed2a --diff-filter=A --since=2026-10-02T18:00:00+02:00 --until=2026-10-04T18:00:00+02:00 --name-only --format= -- 'docs/*.md' | sort -u | comm -12 - &lt;(git ls-tree -r --name-only 9e22d35 docs | sort) | wc -l</code> in the public repo<br><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/9e22d351905a78213ff173b97ce6f5b451dc2d6e/docs" target="_blank" rel="noopener">docs/ at 9e22d35</a></td></tr>
 <tr><td data-label="Claim">Duel acceptance rule, written before the run</td><td data-label="Value" class="num">More than 2 SE better, not more than 2 SE worse against any rival type</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/duel-lab/duels3-search/leaderboard.md#L5" target="_blank" rel="noopener">docs/duel-lab/duels3-search/leaderboard.md:5</a></td></tr>
 <tr><td data-label="Claim">Evals shipped one change and stopped two</td><td data-label="Value" class="num">1 shipped, 2 stopped<span class="cl-note">the shipped change came from the duel-lab matrix (<a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/duel-lab/duels3-matrix.md#L3-L4" target="_blank" rel="noopener">duels3-matrix.md:3-4</a>)</span></td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L256" target="_blank" rel="noopener">SUBMISSION.md:256</a></td></tr>
+<tr><td data-label="Claim">The evals' report step runs through Claude Code's claude-api skill</td><td data-label="Value" class="num">eval reports built with the skill's report builder</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/tools/eval_common.py#L16" target="_blank" rel="noopener">tools/eval_common.py:16</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/tools/eval_duels.py#L35" target="_blank" rel="noopener">tools/eval_duels.py:35</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/tools/eval_broker.py#L29" target="_blank" rel="noopener">tools/eval_broker.py:29</a></td></tr>
+<tr><td data-label="Claim">The evals and the hill climb were built through Claude Code's claude-api skill</td><td data-label="Value" class="num">author's statement</td><td data-label="Source">author's statement</td></tr>
 <tr><td data-label="Claim">Shipped Duels III file has feature F4 off</td><td data-label="Value" class="num">F4 off</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/duel-lab/duels3-matrix.md#L4" target="_blank" rel="noopener">docs/duel-lab/duels3-matrix.md:4</a></td></tr>
 <tr><td data-label="Claim">Friday practice round did not score</td><td data-label="Value" class="num">Rule</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/kit/RULES.md#L94" target="_blank" rel="noopener">kit/RULES.md:94</a></td></tr>
 <tr><td data-label="Claim">Practice duels: bot watch-only; rival's last offer inside our limit</td><td data-label="Value" class="num">12 closed, none a deal (watch-only by design); 8 of 8 inside our limit</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/analysis-friday/duels.md#L30" target="_blank" rel="noopener">docs/analysis-friday/duels.md:30</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/analysis-friday/duels.md#L38" target="_blank" rel="noopener">docs/analysis-friday/duels.md:38</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/analysis-friday/README.md#L9" target="_blank" rel="noopener">docs/analysis-friday/README.md:9</a></td></tr>
@@ -2358,7 +2865,7 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <tr><td data-label="Claim">Sunday plan approved 11:52</td><td data-label="Value" class="num">11:52</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/sunday-final-handoff.md#L3" target="_blank" rel="noopener">docs/submission/orchestration/sunday-final-handoff.md:3</a></td></tr>
 <tr><td data-label="Claim">Sunday conductor session start</td><td data-label="Value" class="num">11:55</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-04_bazaar-final-conductor.md#L1" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-04_bazaar-final-conductor.md:1</a></td></tr>
 <tr><td data-label="Claim">Sunday conductor ran to the close with no human gates</td><td data-label="Value" class="num">11:55 to 15:01</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-04_bazaar-final-conductor.md#L7" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-04_bazaar-final-conductor.md:7</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-04_bazaar-final-conductor.md#L59" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-04_bazaar-final-conductor.md:59</a></td></tr>
-<tr><td data-label="Claim">Sunday plan authorised in-game moves only inside the value rules</td><td data-label="Value" class="num">Inside the value rules; the planner stopped after the plan</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/sunday-final-plan.md#L28" target="_blank" rel="noopener">docs/submission/orchestration/sunday-final-plan.md:28</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/sunday-final-plan.md#L24" target="_blank" rel="noopener">docs/submission/orchestration/sunday-final-plan.md:24</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/sunday-final-plan.md#L1" target="_blank" rel="noopener">docs/submission/orchestration/sunday-final-plan.md:1</a></td></tr>
+<tr><td data-label="Claim">Sunday plan authorised in-game moves only inside the value rules</td><td data-label="Value" class="num">Inside the value rules</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/sunday-final-plan.md#L28" target="_blank" rel="noopener">docs/submission/orchestration/sunday-final-plan.md:28</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/sunday-final-plan.md#L1" target="_blank" rel="noopener">docs/submission/orchestration/sunday-final-plan.md:1</a></td></tr>
 <tr><td data-label="Claim">Bot settings can only lower the limit</td><td data-label="Value" class="num">min(limit, cap)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/abuela.py#L399-L401" target="_blank" rel="noopener">agent/abuela.py:399-401</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/chato.py#L624-L626" target="_blank" rel="noopener">agent/chato.py:624-626</a></td></tr>
 <tr><td data-label="Claim">Desk page bids never above the cap or value minus margin</td><td data-label="Value" class="num">Page bid ceiling</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/agent/market_desk.py#L63" target="_blank" rel="noopener">agent/market_desk.py:63</a></td></tr>
 <tr><td data-label="Claim">Friday: every dealer-bot run approved by the owner</td><td data-label="Value" class="num">Owner go per run</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md#L5" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md:5</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md#L31" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-02_bazaar-abuela-queue.md:31</a></td></tr>
@@ -2389,7 +2896,9 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <tr><td data-label="Claim">The conversation is not carried over; sessions are independent</td><td data-label="Value" class="num">Official behaviour</td><td data-label="Source"><a href="https://code.claude.com/docs/en/how-claude-code-works" target="_blank" rel="noopener">Claude Code docs: how-claude-code-works</a></td></tr>
 <tr><td data-label="Claim">The cleanup line did nothing on macOS (/tmp is a symlink; find needs -H); the served copy has the fix</td><td data-label="Value" class="num">-H</td><td data-label="Source"><a href="compaction-bell.sh.txt#L4-L5" target="_blank" rel="noopener">compaction-bell.sh:4-5</a><br><a href="compaction-bell.sh.txt#L23" target="_blank" rel="noopener">compaction-bell.sh:23</a></td></tr>
 <tr><td data-label="Claim">The cleanup was meant to delete counters older than 24 hours</td><td data-label="Value" class="num">24 h</td><td data-label="Source"><a href="compaction-bell.sh.txt#L22" target="_blank" rel="noopener">compaction-bell.sh:22</a></td></tr>
-<tr><td data-label="Claim">Saturday zero-score Market Test and its fix</td><td data-label="Value" class="num">Scored 0; fixed in PR #22</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L111" target="_blank" rel="noopener">SUBMISSION.md:111</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L336" target="_blank" rel="noopener">SUBMISSION.md:336</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/analysis-saturday/README.md#L24" target="_blank" rel="noopener">docs/analysis-saturday/README.md:24</a></td></tr>
+<tr><td data-label="Claim">Saturday morning: eight pull requests merged in ten minutes before the scored test</td><td data-label="Value" class="num">8 merged, Sat 09:23 to 09:33</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L320-L326" target="_blank" rel="noopener">SUBMISSION.md:320-326</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L319" target="_blank" rel="noopener">SUBMISSION.md:319</a></td></tr>
+<tr><td data-label="Claim">Saturday zero-score Market Test and its fix</td><td data-label="Value" class="num">Scored 0 at 11:50; fix live 12:05 (PR #22)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L111" target="_blank" rel="noopener">SUBMISSION.md:111</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L336" target="_blank" rel="noopener">SUBMISSION.md:336</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/analysis-saturday/README.md#L24" target="_blank" rel="noopener">docs/analysis-saturday/README.md:24</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-04_bazaar-pitch2.md#L27" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-04_bazaar-pitch2.md:27</a></td></tr>
+<tr><td data-label="Claim">I had a standing rule in my own workspace, an adversarial review before any merge, and skipped it on Saturday morning</td><td data-label="Value" class="num">author's statement</td><td data-label="Source">author's statement</td></tr>
 <tr><td data-label="Claim">PRs merged overnight</td><td data-label="Value" class="num">14</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/judges/team3-dossier.md#L268" target="_blank" rel="noopener">evidence dossier, line 268</a></td></tr>
 <tr><td data-label="Claim">Codex reviews on selected PRs, some merges unreviewed</td><td data-label="Value" class="num">Selected PRs reviewed; #105 to #108 merged without a completed review</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/judges/team3-dossier.md#L102" target="_blank" rel="noopener">evidence dossier, line 102</a></td></tr>
 <tr><td data-label="Claim">The Sunday analyst never held a key</td><td data-label="Value" class="num">No key, no message, no offer</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/plans/sunday-analyst.md#L3" target="_blank" rel="noopener">docs/plans/sunday-analyst.md:3</a></td></tr>
@@ -2414,6 +2923,9 @@ Repo: https://github.com/thiagoamaro91/negotiation-agent</pre>
 <tr><td data-label="Claim">My Claude side out of quota on Saturday evening: credits about 20:00, five-hour cap 23:50, nothing until 07:00</td><td data-label="Value" class="num">~20:00; 23:50; 07:00</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/submission/orchestration/session-briefings/2026-10-03_bazaar-prs-codex.md#L37" target="_blank" rel="noopener">docs/submission/orchestration/session-briefings/2026-10-03_bazaar-prs-codex.md:37</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/SUBMISSION.md#L134" target="_blank" rel="noopener">SUBMISSION.md:134</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/judges/team3-dossier.md#L205" target="_blank" rel="noopener">evidence dossier, line 205</a></td></tr>
 <tr><td data-label="Claim">Both of us hit our Codex weekly limits over the weekend</td><td data-label="Value" class="num">weekly limit reached, both</td><td data-label="Source">author's statement</td></tr>
 <tr><td data-label="Claim">Saturday's Claude tokens on my laptop, mostly cache reads</td><td data-label="Value" class="num">1,005,925,166 tokens; 947,946,290 cache reads (94%)</td><td data-label="Source"><code>ccusage daily --since 20261003 --until 20261003 --json</code></td></tr>
+<tr><td data-label="Claim">By Saturday midday Hector and I had become the gate between our agents; once the sessions talked to each other, we worked on the architecture while the agents settled the technical details</td><td data-label="Value" class="num">author's statement</td><td data-label="Source">author's statement</td></tr>
+<tr><td data-label="Claim">Our rank when the bus went live, by the evening, and at the freeze</td><td data-label="Value" class="num">16th at the Sat 12:19 snapshot, 4th by 17:29, 4th at the freeze</td><td data-label="Source"><code>logs/feed/snapshots.jsonl at the pin: our rank in the leaderboard snapshots of Sat 12:19, Sat 17:29 and Sun 14:56 (the last before the freeze)</code></td></tr>
+<tr><td data-label="Claim">The final plan came out of about two hours of back-and-forth between the author and Claude; after approval nobody touched the bots</td><td data-label="Value" class="num">author's statement</td><td data-label="Source">author's statement</td></tr>
 <tr><td data-label="Claim">Friday game opened late; first deal before 21:00</td><td data-label="Value" class="num">About 20:20 instead of 19:00; first deal in commit a403e81, 2026-10-02 20:54:13 +0200</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/docs/findings.md#L45" target="_blank" rel="noopener">docs/findings.md:45</a><br><code>git show -s --format=%ci a403e81</code> in the public repo</td></tr>
 <tr><td data-label="Claim">Duel deals outside our limit, whole weekend</td><td data-label="Value" class="num">0 of 163 (202 duels with a logged result)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/logs/duel" target="_blank" rel="noopener">logs/duel/2026-10-03.jsonl and 2026-10-04.jsonl</a><br><a href="live_audit.py.txt" target="_blank" rel="noopener">audit script</a></td></tr>
 <tr><td data-label="Claim">Offers that swapped in a different card mid-thread, accepted</td><td data-label="Value" class="num">0 of 13 (9 cancelled, 2 expired, 2 never settled in the feed)</td><td data-label="Source"><a href="https://github.com/thiagoamaro91/negotiation-agent/blob/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/logs/picaros/2026-10-04.jsonl" target="_blank" rel="noopener">logs/picaros/2026-10-04.jsonl</a><br><a href="https://github.com/thiagoamaro91/negotiation-agent/tree/ac7ed2a7610dd27bf877b38b49684dd4107cbe18/logs/threads" target="_blank" rel="noopener">logs/threads/</a><br><a href="live_audit.py.txt" target="_blank" rel="noopener">audit script</a></td></tr>
@@ -2465,7 +2977,8 @@ gate.
 
 Author's part: Thiago designed the conductor setup, ran the conductor sessions on his side
 (each handed off through a written briefing) and owned the strategy; on Friday he built the
-first dealer bot and the team dashboard. Hector built the evals and more of the code.
+first dealer bot and the team dashboard. Thiago and Hector built the evals through Claude Code's
+claude-api skill, and gated changes on hill-climbing them.
 
 Lesson (the author's view): a deterministic core makes the search for improvements cheap and
 repeatable; a model in the decision loop makes it harder and costlier, not impossible. The
